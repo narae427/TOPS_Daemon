@@ -1,0 +1,122 @@
+package tops.main;
+import java.io.*;
+import java.net.*;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.spec.InvalidKeySpecException;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+
+import tops.struct.*;
+import net.rudp.*;
+
+public class Client_NodeThread extends Thread {
+	protected FreindNode fNode = null;
+	protected Message msg = new Message();
+	protected UpdateFiles UF = null;
+	Socket socket = null;
+
+	public Client_NodeThread(FreindNode fNode) throws UnknownHostException,
+			IOException {
+		this.fNode = fNode;
+	}
+	
+	public void readyForReceive_BloomFilter(String friendId) throws Exception {
+		synchronized(this){
+		socket = new Socket(InetAddress.getByName(fNode.privateIP),fNode.privatePN);
+		try {
+			Client.sendMSG(fNode, msg.Request_BloomFilter(), true);
+		} catch (IOException e4) {
+			// TODO Auto-generated catch block
+			e4.printStackTrace();
+		}
+		
+		UF = new UpdateFiles(socket);
+		UF.ReceiveBloomFilter(MessageType.Data, fNode);
+		
+		socket.close();
+		}
+	}
+
+	public void readyForReceiveUpdateFile_UPDATE() throws Exception {
+		synchronized(this){
+		socket = new Socket(InetAddress.getByName(fNode.privateIP),fNode.privatePN);
+		
+		try {
+			Client.sendMSG(fNode, msg.Request_Updates(), true);
+		
+		} catch (IOException e4) {
+			// TODO Auto-generated catch block
+			e4.printStackTrace();
+		}
+		
+		UF = new UpdateFiles(socket);
+		UF.ReceiveUpdateFiles(MessageType.Updates, fNode);
+		
+		socket.close();
+		}
+	}
+
+	public void readyForReceiveUpdateFile_DATA(String friendId) throws Exception {
+		synchronized(this){
+		socket = new Socket(InetAddress.getByName(fNode.privateIP),fNode.privatePN);
+		try {
+			Client.sendMSG(fNode, msg.Request_Data(friendId), true);
+		
+		} catch (IOException e4) {
+			// TODO Auto-generated catch block
+			e4.printStackTrace();
+		}
+		
+		UF = new UpdateFiles(socket);
+		UF.ReceiveUpdateFiles(MessageType.Data, fNode);
+		
+		socket.close();
+		}
+	}
+
+	
+	public void readyForRecieveFile(InetAddress ia, int portNumber,String fileName) throws Exception {
+		synchronized(this){
+
+		socket = new Socket(InetAddress.getByName(fNode.privateIP),fNode.privatePN);
+		
+		try {
+			Client.sendMSG(fNode, msg.Request_File( fileName), true);
+		
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		UF = new UpdateFiles(socket);
+		UF.ReceiveFile(fileName); // fName 이름을 가진 파일을 받을준비를 함.
+		socket.close();
+		}
+	}
+
+	public void run() {
+			try {
+
+				System.out.println("Advertisement_Login1  to " + fNode.freindID);
+				
+				Client.sendMSG(fNode, msg.Advertisement_Login1(), true);
+
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				System.out.println();
+				System.out.println("*** CLIENT "
+						+ "**************************************"
+						+ fNode.publicPN + "접속 실패");
+				System.out.println();
+				e.printStackTrace();
+			}
+	}
+		
+
+}
