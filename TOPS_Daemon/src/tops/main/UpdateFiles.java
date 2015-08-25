@@ -39,7 +39,7 @@ public class UpdateFiles {
 	}
 
 	/*
-	 * UpdateFileì„ ì½ì–´ì™€ì„œ ì ìš©ì‹œí‚¨ë‹¤.
+	 * UpdateFileÀ» ÀĞ¾î¿Í¼­ Àû¿ë½ÃÅ²´Ù.
 	 */
 	public void DoUpdate(MessageType msgType, FreindNode fNode)
 			throws Exception {
@@ -48,9 +48,9 @@ public class UpdateFiles {
 				.println("===============================================================");
 
 		File[] myUpdateFile = null;
-		myUpdateFile = myUpdateFilePath.listFiles(new FilenameFilter() { // ë‚´ê°€
-																			// ê°€ì§€ê³ 
-																			// ìˆëŠ”
+		myUpdateFile = myUpdateFilePath.listFiles(new FilenameFilter() { // ³»°¡
+																			// °¡Áö°í
+																			// ÀÖ´Â
 																			// updateFiles
 
 					@Override
@@ -72,9 +72,9 @@ public class UpdateFiles {
 			String[] fileNameTokens = f.getName().split("_");
 			String id = fileNameTokens[0];
 
-			int oldVersion = TOPS_Daemon.freindVerHT.get(id); // ë‚´ê°€ ê°€ì§€ê³  ìˆëŠ” ì¹œêµ¬ì˜ ìµœê³  ë²„ì „
+			int oldVersion = TOPS_Daemon.freindVerHT.get(id); // ³»°¡ °¡Áö°í ÀÖ´Â Ä£±¸ÀÇ ÃÖ°í ¹öÀü
 			int newVersion = 0;
-			System.out.println(" ~ " + f.getName() + "ì˜ êµ¬ë²„ì „ : " + oldVersion);
+			System.out.println(" ~ " + f.getName() + "ÀÇ ±¸¹öÀü : " + oldVersion);
 			while (true) {
 
 				String str = reader.readLine();
@@ -83,12 +83,12 @@ public class UpdateFiles {
 					break;
 
 				if (str.substring(0, 7).equals("VERSION")) {
-					newVersion = Integer.valueOf(str.substring(8)); // ìƒˆë¡œ ë“¤ì–´ì˜¨
+					newVersion = Integer.valueOf(str.substring(8)); // »õ·Î µé¾î¿Â
 																	// updateFile
-																	// ì— ìˆëŠ” ë²„ì „
+																	// ¿¡ ÀÖ´Â ¹öÀü
 					// if(newVersion <= oldVersion){
-					// String trashStr = reader.readLine(); //write ì´ë‚˜ deleteì½ì–´ì„œ
-					// ë²„ë¦¼.
+					// String trashStr = reader.readLine(); //write ÀÌ³ª deleteÀĞ¾î¼­
+					// ¹ö¸².
 					// continue;
 					// }
 				}
@@ -134,9 +134,9 @@ public class UpdateFiles {
 			}
 
 			TOPS_Daemon.freindVerHT.put(id, newVersion);
-			System.out.println(" ~ " + id + "ì˜ ìƒˆë²„ì „ : " + newVersion);
-			System.out.println(" ~ " + writeCount + "ê°œ íŒŒì¼ ìƒì„±, " + deleteCount
-					+ "ê°œ íŒŒì¼ ì‚­ì œ ì™„ë£Œ");
+			System.out.println(" ~ " + id + "ÀÇ »õ¹öÀü : " + newVersion);
+			System.out.println(" ~ " + writeCount + "°³ ÆÄÀÏ »ı¼º, " + deleteCount
+					+ "°³ ÆÄÀÏ »èÁ¦ ¿Ï·á");
 			System.out.println();
 
 			reader.close();
@@ -170,7 +170,7 @@ public class UpdateFiles {
 		/*
 		 * if(fileName.equals("FINISH")){ //dos.writeUTF("FINISH"); return; }
 		 */
-		// dos.writeUTF(fileName); //ì–´ë–¤ íŒŒì¼ì„ ë°›ì•„ì•¼í•˜ëŠ”ì§€
+		// dos.writeUTF(fileName); //¾î¶² ÆÄÀÏÀ» ¹Ş¾Æ¾ßÇÏ´ÂÁö
 		String[] fileNameTokens = fileName.split("_");
 		String id = fileNameTokens[0];
 
@@ -247,7 +247,7 @@ public class UpdateFiles {
 		DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
 		DataInputStream dis = new DataInputStream(socket.getInputStream());
 
-		// String fileName = dis.readUTF(); //ì–´ë–¤ íŒŒì¼ì„ ë³´ë‚´ì£¼ì–´ì•¼í•˜ëŠ”ì§€
+		// String fileName = dis.readUTF(); //¾î¶² ÆÄÀÏÀ» º¸³»ÁÖ¾î¾ßÇÏ´ÂÁö
 		if (fileName.equals("FINISH")) {
 			return -1;
 		}
@@ -284,15 +284,15 @@ public class UpdateFiles {
 		}
 
 		LineNumberReader reader = new LineNumberReader(new FileReader(f));
-		String firstLine = reader.readLine(); // ê·¸ë¦¼íŒŒì¼ ê²½ë¡œ
+		String firstLine = reader.readLine(); // ±×¸²ÆÄÀÏ °æ·Î
 		reader.close();
 
 		if (firstLine.equals("Already Deleted ! ")
 				|| firstLine.equals("[No Picture]")) {
-			// ì‚¬ì§„ì•ˆë³´ë‚´ì•¼í•¨.
+			// »çÁø¾Èº¸³»¾ßÇÔ.
 			dos.writeUTF("NoPicture");
 		} else {
-			// ì‚¬ì§„ë³´ë‚´ì•¼í•¨.
+			// »çÁøº¸³»¾ßÇÔ.
 			StringTokenizer st = new StringTokenizer(firstLine);
 			String pictureName = "";
 			while (st.hasMoreTokens()) {
@@ -362,13 +362,13 @@ public class UpdateFiles {
 
 			File updateFilePath = new File(myUpdateFilePath
 					+ System.getProperty("file.separator") + fileName); // updatefile
-																		// ê²½ë¡œ
+																		// °æ·Î
 			// File myUpdateFilePath = new File(myFolderPath);
 
 			File[] myUpdateFile = null;
-			myUpdateFile = myUpdateFilePath.listFiles(new FilenameFilter() { // ë‚´ê°€
-																				// ê°€ì§€ê³ 
-																				// ìˆëŠ”
+			myUpdateFile = myUpdateFilePath.listFiles(new FilenameFilter() { // ³»°¡
+																				// °¡Áö°í
+																				// ÀÖ´Â
 																				// updateFiles
 
 						@Override
@@ -390,7 +390,7 @@ public class UpdateFiles {
 					temp.length()));
 			TOPS_Daemon.freindVerHT.put(id, oldVer);
 
-			System.out.println(" ~ " + "ì¹œêµ¬ ë¦¬ìŠ¤íŠ¸ ì¶”ê°€ : " + id + " 	" + oldVer);
+			System.out.println(" ~ " + "Ä£±¸ ¸®½ºÆ® Ãß°¡ : " + id + " 	" + oldVer);
 			int newVer = Integer.valueOf(fileName.substring(temp.length()));
 
 			Hashtable<String, Integer> tempIDM = new Hashtable<String, Integer>();
@@ -432,7 +432,7 @@ public class UpdateFiles {
 
 		}
 
-		System.out.println(" ~ " + count + "ê°œ íŒŒì¼ UpdateFile Receive ì—…ë°ì´íŠ¸ ì™„ë£Œ");
+		System.out.println(" ~ " + count + "°³ ÆÄÀÏ UpdateFile Receive ¾÷µ¥ÀÌÆ® ¿Ï·á");
 
 		if (count > 0)
 			DoUpdate(msgType, fnode);
@@ -460,7 +460,7 @@ public class UpdateFiles {
 		}
 
 		if (tempFiles == null) {
-			System.out.println("UpdateFile ì—†ìŒ"); // //ì—¬ê¸°ê°€ ë¬¸ì œë„¤
+			System.out.println("UpdateFile ¾øÀ½"); // //¿©±â°¡ ¹®Á¦³×
 			return;
 		}
 
@@ -472,7 +472,7 @@ public class UpdateFiles {
 		}
 
 		if (fileArr.size() == 0) {
-			System.out.println("updateFile ì—†ìŒ");
+			System.out.println("updateFile ¾øÀ½");
 			return;
 		}
 		DataOutputStream dos = null;
@@ -518,7 +518,7 @@ public class UpdateFiles {
 			TOPS_Daemon.IDM.put(TOPS_Daemon.myID, tempIDM);
 
 			dos.writeUTF(fileName);
-			String yn = dis.readUTF(); // ì¤‘ë³µíŒŒì¼ì¸ì§€ ì•„ë‹Œì§€
+			String yn = dis.readUTF(); // Áßº¹ÆÄÀÏÀÎÁö ¾Æ´ÑÁö
 			if (yn.equals("NO")) {
 				continue;
 			}
@@ -548,7 +548,7 @@ public class UpdateFiles {
 		// dos.close();
 	}
 
-	public static File[] OrganizeFiles(String path) { // ë””ë ‰í† ë¦¬ì•ˆì— íŒŒì¼ë“¤ ë½‘ì•„ë‚´ì£¼ê¸°
+	public static File[] OrganizeFiles(String path) { // µğ·ºÅä¸®¾È¿¡ ÆÄÀÏµé »Ì¾Æ³»ÁÖ±â
 
 		File f = new File(path);
 		File[] directories = f.listFiles(new FileFilter() {
