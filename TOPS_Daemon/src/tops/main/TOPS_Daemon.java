@@ -1,6 +1,5 @@
 package tops.main;
 
-import java.awt.EventQueue;
 import java.io.*;
 import java.math.BigInteger;
 import java.net.*;
@@ -21,6 +20,7 @@ public class TOPS_Daemon {
 	public static String myID = "";
 	public static int myPublicPN = 0;
 	public static int myPrivatePN = 0;
+	@SuppressWarnings("rawtypes")
 	public static BloomFilter bloomFilter;
 
 	// static String myInternalIpAddress = "";
@@ -76,6 +76,7 @@ public class TOPS_Daemon {
 		new Thread(server).start();
 	}
 	
+	@SuppressWarnings("static-access")
 	public  void initialize(String myID) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException{
 		this.myID = myID;
 		myPrivateIP = InetAddress.getLocalHost().getHostAddress();
@@ -96,8 +97,8 @@ public class TOPS_Daemon {
 			KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA");
 			kpg.initialize(2048);
 			KeyPair kp = kpg.genKeyPair();
-			Key publicKey = kp.getPublic();
-			Key privateKey = kp.getPrivate();
+//			Key publicKey = kp.getPublic();
+//			Key privateKey = kp.getPrivate();
 
 			KeyFactory fact = KeyFactory.getInstance("RSA");
 			RSAPublicKeySpec pub = fact.getKeySpec(kp.getPublic(),

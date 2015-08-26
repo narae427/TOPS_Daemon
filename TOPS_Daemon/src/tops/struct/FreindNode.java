@@ -1,9 +1,5 @@
 package tops.struct;
 import java.math.BigInteger;
-import java.net.*;
-import java.security.Key;
-import java.security.PrivateKey;
-import java.security.PublicKey;
 
 import com.google.common.hash.*;
 
@@ -22,6 +18,7 @@ public class FreindNode{
 	public boolean keySendChk = false;
 	public boolean keyRecieveChk = false;
 	public ReliableSocket socket = null;
+	@SuppressWarnings("rawtypes")
 	public BloomFilter bloomFilter;
 	
 	

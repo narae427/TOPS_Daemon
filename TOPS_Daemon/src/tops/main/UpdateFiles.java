@@ -15,11 +15,8 @@ import java.io.IOException;
 import java.io.LineNumberReader;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Hashtable;
-import java.util.List;
 import java.util.StringTokenizer;
 
 import com.google.common.base.*;
@@ -164,7 +161,6 @@ public class UpdateFiles {
 	}
 
 	public void ReceiveFile(String fileName) throws IOException {
-		DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
 		DataInputStream dis = new DataInputStream(socket.getInputStream());
 
 		/*
@@ -245,7 +241,6 @@ public class UpdateFiles {
 
 	public int SendFile(String fileName) throws IOException {
 		DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
-		DataInputStream dis = new DataInputStream(socket.getInputStream());
 
 		// String fileName = dis.readUTF(); //어떤 파일을 보내주어야하는지
 		if (fileName.equals("FINISH")) {
@@ -439,6 +434,7 @@ public class UpdateFiles {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	public void SendUpdateFiles(MessageType msgType, FreindNode fnode,
 			final String friendId) throws IOException {
 		System.out.println("SEND UPDATEFILES");
@@ -599,7 +595,6 @@ public class UpdateFiles {
 
 	public void ReceiveBloomFilter(MessageType msgType, FreindNode fnode)
 			throws Exception {
-		DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
 		DataInputStream dis = new DataInputStream(socket.getInputStream());
 
 		fnode.bloomFilter = BloomFilter.readFrom(dis,
@@ -611,19 +606,14 @@ public class UpdateFiles {
 	public void SendBloomFilter(MessageType msgType, FreindNode fnode)
 			throws IOException {
 		DataOutputStream dos = null;
-		DataInputStream dis = null;
 		try {
 			dos = new DataOutputStream(socket.getOutputStream());
-			dis = new DataInputStream(socket.getInputStream());
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 
 		TOPS_Daemon.bloomFilter.writeTo(dos);
-
-		// dis.close();
-		// dos.close();
 	}
 
 }

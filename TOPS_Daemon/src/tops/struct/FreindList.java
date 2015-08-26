@@ -4,21 +4,16 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.LineNumberReader;
-import java.net.DatagramPacket;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.HashMap;
-import java.util.Random;
 import java.util.StringTokenizer;
 
-import javax.swing.text.html.HTMLDocument.Iterator;
-
 import tops.main.*;
-import tops.struct.*;
 
 
 
 public class FreindList {
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static HashMap<String, FreindNode> freindList = new HashMap();
 	
 	static public FreindNode  getFriendNode(String id){
@@ -51,6 +46,7 @@ public class FreindList {
 		
 	}
 	
+	@SuppressWarnings("resource")
 	static public String getEntireFreindList() throws IOException{
 		File freindListFile = new File(TOPS_Daemon.myFolderPath + System.getProperty("file.separator") + TOPS_Daemon.myID + "_FreindList" );
 		if(!freindListFile.exists())
@@ -67,6 +63,7 @@ public class FreindList {
 		return entireFreindList;
 	}
 	
+	@SuppressWarnings("resource")
 	static public int getEntireFreindSize() throws IOException{
 		int numFriends = 0;
 		
@@ -86,7 +83,7 @@ public class FreindList {
 	
 	
 	static public void printFreindList(){
-		System.out.println(" *** ÇöÀç OnlineÀÎ Ä£±¸");
+		System.out.println(" *** ï¿½ï¿½ï¿½ï¿½ Onlineï¿½ï¿½ Ä£ï¿½ï¿½");
 		for(FreindNode fn : freindList.values()){
 			System.out.println(fn.freindID);
 		}

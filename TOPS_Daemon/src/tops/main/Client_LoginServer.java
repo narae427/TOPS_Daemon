@@ -1,8 +1,6 @@
 package tops.main;
 
 import java.io.*;
-import java.net.*;
-import java.util.Random;
 
 import tops.struct.*;
 import net.rudp.*;
@@ -29,8 +27,6 @@ public class Client_LoginServer {
 	    outputBuffer.flush();
     }
 
-	@SuppressWarnings("unused")
-	  
 	public void ConnectToMainServer() {
 		if(Client.connectToMainServer == true){
 			return;

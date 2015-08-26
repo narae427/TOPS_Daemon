@@ -1,10 +1,6 @@
 package tops.struct;
 
 import java.io.*;
-import java.net.*;
-import java.util.*;
-
-import javax.swing.*;
 
 import tops.main.*;
 
@@ -16,8 +12,8 @@ public class BFilter {
 	public BFilter() {
 	}
 
+	@SuppressWarnings("unchecked")
 	static public void makeBloomFilter() throws IOException{
-		int HashTableSize = 0;
 		double probability=0.0;
 		
 		int h = 3; //parameters.optimal_parameters.number_of_hashes;
@@ -59,8 +55,10 @@ public class BFilter {
 		}
 
 	}
- public static void calcCommonFriend(String fid) {
+ @SuppressWarnings("unchecked")
+public static void calcCommonFriend(String fid) {
 	FreindNode fn = FreindList.getFriendNode(fid);
+	@SuppressWarnings("rawtypes")
 	BloomFilter f_BF = fn.bloomFilter;
 	String vList = "";
 		File freindListFile = new File(TOPS_Daemon.myFolderPath
@@ -95,7 +93,8 @@ public class BFilter {
 		}
 	}
 
-	static public String getCommonFriendList( BloomFilter f_BF) {
+	@SuppressWarnings({ "resource", "unchecked" })
+	static public String getCommonFriendList( @SuppressWarnings("rawtypes") BloomFilter f_BF) {
 		String entireFreindList = "";
 		File freindListFile = new File(TOPS_Daemon.myFolderPath
 				+ System.getProperty("file.separator") + TOPS_Daemon.myID
@@ -125,13 +124,14 @@ public class BFilter {
 		return entireFreindList;
 	}
 
-	static public String getCommonFileList(BloomFilter f_BF) {
+	@SuppressWarnings("unchecked")
+	static public String getCommonFileList(@SuppressWarnings("rawtypes") BloomFilter f_BF) {
 		File[] myUpdateFile = null;
 
 		File myUpdateFilePath = new File(TOPS_Daemon.myFolderPath
 				+ System.getProperty("file.separator") + "UpdateFile");
 
-		myUpdateFile = myUpdateFilePath.listFiles(new FilenameFilter() { // ³»°¡°¡Áö°íÀÖ´ÂupdateFiles
+		myUpdateFile = myUpdateFilePath.listFiles(new FilenameFilter() { // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½updateFiles
 
 					@Override
 					public boolean accept(File dir, String name) {

@@ -1,33 +1,12 @@
 package tops.main;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.io.*;
 import java.math.BigInteger;
 import java.net.*;
-import java.security.Key;
-import java.security.KeyFactory;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.security.spec.PKCS8EncodedKeySpec;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Random;
 import java.util.StringTokenizer;
 import java.util.logging.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.swing.JDialog;
-
-import com.google.common.hash.*;
 
 import tops.struct.*;
-import net.rudp.*;
 
 public class ServerThread implements Runnable {
 
@@ -40,8 +19,6 @@ public class ServerThread implements Runnable {
 	Client_NodeThread MNT;
 	Socket socket = null;
 	static DatagramSocket ds = null;
-	boolean chk = false; // MS_ResultOfCheckOnlineFreind -> chk = true,
-							// MS_ResultOfCheckOnlineFreinds -> chk = false
 
 	String message = "";
 	String freindIds = null;
@@ -72,10 +49,7 @@ public class ServerThread implements Runnable {
 			File[] myUpdateFile = null;
 			File myUpdateFilePath = new File(TOPS_Daemon.myFolderPath
 					+ System.getProperty("file.separator") + "UpdateFile");
-			File updateFilePath = new File(myUpdateFilePath
-					+ System.getProperty("file.separator") + fileName); // updatefile
-																		// 경로
-			myUpdateFile = myUpdateFilePath.listFiles(new FilenameFilter() { // 내가가지고있는updateFiles
+			myUpdateFile = myUpdateFilePath.listFiles(new FilenameFilter() { 
 
 						@Override
 						public boolean accept(File dir, String name) {
@@ -116,10 +90,8 @@ public class ServerThread implements Runnable {
 		File[] myUpdateFile = null;
 		File myUpdateFilePath = new File(TOPS_Daemon.myFolderPath
 				+ System.getProperty("file.separator") + "UpdateFile");
-		File updateFilePath = new File(myUpdateFilePath
-				+ System.getProperty("file.separator") + fileName); // updatefile
-																	// 경로
-		myUpdateFile = myUpdateFilePath.listFiles(new FilenameFilter() { // 내가가지고있는updateFiles
+		
+		myUpdateFile = myUpdateFilePath.listFiles(new FilenameFilter() { 
 
 					@Override
 					public boolean accept(File dir, String name) {
@@ -145,7 +117,6 @@ public class ServerThread implements Runnable {
 
 		boolean recieved = false;
 
-		// if(updateFilePath.exists() && oldVer >= newVer){
 		if (oldVer >= newVer) {
 			recieved = true;
 		} else {
@@ -156,33 +127,33 @@ public class ServerThread implements Runnable {
 	}
 
 	// SendFiles -> RecieveFiles
-	@SuppressWarnings("static-access")
+	@SuppressWarnings("unchecked")
 	public void run() {
 
 		if (message.equals("OPEN")) {
 			open = true;
 		}
-
-		msg.getPatternfromMSG(message);
+		PM pm = new PM();
+		msg.getPatternfromMSG(message, pm);
 
 		Client_LoginServer MMS = new Client_LoginServer();
 
-		FreindNode fnode = FreindList.freindList.get(msg.idMessage);
+		FreindNode fnode = FreindList.freindList.get(pm.idMessage);
 		String MS_DoneMSG = "";
 
-		MessageType type = MessageType.valueOf(msg.commandMessage);
+		MessageType type = MessageType.valueOf(pm.commandMessage);
 		int messageType = type.ordinal();
 		switch (messageType) {
 		case 0: // "PublicKey"
 
-			fnode = FreindList.freindList.get(msg.idMessage);
+			fnode = FreindList.freindList.get(pm.idMessage);
 
-			printMSG(msg.commandMessage, fnode.freindID);
+			printMSG(pm.commandMessage, fnode.freindID);
 
 //			if (fnode.pubMod != null && fnode.pubExp != null)
 //				break;
-			fnode.pubMod = new BigInteger(msg.modMessage);
-			fnode.pubExp = new BigInteger(msg.expMessage);
+			fnode.pubMod = new BigInteger(pm.modMessage);
+			fnode.pubExp = new BigInteger(pm.expMessage);
 
 			fnode.keyRecieveChk = true;
 			
@@ -197,9 +168,9 @@ public class ServerThread implements Runnable {
 
 			break;
 		case 1: // "Advertisement_Login1"
-			fnode = FreindList.freindList.get(msg.idMessage);
+			fnode = FreindList.freindList.get(pm.idMessage);
 
-			printMSG(msg.commandMessage, fnode.freindID);
+			printMSG(pm.commandMessage, fnode.freindID);
 
 			try {
 				MNT = new Client_NodeThread(fnode);
@@ -219,9 +190,9 @@ public class ServerThread implements Runnable {
 			break;
 
 		case 2: // "Advertisement_Login2"
-			fnode = FreindList.freindList.get(msg.idMessage);
+			fnode = FreindList.freindList.get(pm.idMessage);
 
-			printMSG(msg.commandMessage, fnode.freindID);
+			printMSG(pm.commandMessage, fnode.freindID);
 
 			try {
 				MNT = new Client_NodeThread(fnode);
@@ -233,9 +204,9 @@ public class ServerThread implements Runnable {
 			break;
 
 		case 3: // "Request_Updates"
-			fnode = FreindList.freindList.get(msg.idMessage);
+			fnode = FreindList.freindList.get(pm.idMessage);
 
-			printMSG(msg.commandMessage, fnode.freindID);
+			printMSG(pm.commandMessage, fnode.freindID);
 
 			Socket socket = null;
 			try {
@@ -255,16 +226,16 @@ public class ServerThread implements Runnable {
 
 		case 4: // "Request_Data"
 
-			fnode = FreindList.freindList.get(msg.idMessage);
+			fnode = FreindList.freindList.get(pm.idMessage);
 
-			printMSG(msg.commandMessage, fnode.freindID);
+			printMSG(pm.commandMessage, fnode.freindID);
 
 			try {
 				socket = Server.fileSocket.accept();
 
 				UF = new UpdateFiles(socket);
 				UF.SendUpdateFiles(MessageType.Request_Data, fnode,
-						msg.fidMessage);
+						pm.fidMessage);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -273,7 +244,7 @@ public class ServerThread implements Runnable {
 
 		case 5: // "Updates"
 
-			fnode = FreindList.freindList.get(msg.idMessage);
+			fnode = FreindList.freindList.get(pm.idMessage);
 
 			Client.CallAdvertisement_UPDATE();
 
@@ -281,21 +252,21 @@ public class ServerThread implements Runnable {
 
 		case 6: // "Data"
 
-			fnode = FreindList.freindList.get(msg.idMessage);
+			fnode = FreindList.freindList.get(pm.idMessage);
 
-			printMSG(msg.commandMessage, fnode.freindID);
+			printMSG(pm.commandMessage, fnode.freindID);
 			System.out.println("Data MSG :  " + message);
 
-			Client.CallAdvertisement_DATA(msg.fidMessage, msg.fnameMessage);
+			Client.CallAdvertisement_DATA(pm.fidMessage, pm.fnameMessage);
 
 			break;
 		case 7: // "Advertisement_Update"
-			if (checkUpdates(msg.fnameMessage)){
-				System.out.println(" 중복 업데이트 BREAK !!!");
+			if (checkUpdates(pm.fnameMessage)){
+				System.out.println(" BREAK !!!");
 				break;
 			}
 				
-			printMSG(msg.commandMessage, fnode.freindID);
+			printMSG(pm.commandMessage, fnode.freindID);
 
 			try {
 				MNT = new Client_NodeThread(fnode);
@@ -306,25 +277,25 @@ public class ServerThread implements Runnable {
 			break;
 
 		case 8: // "Advertisement_Data":
-			printMSG(msg.commandMessage, fnode.freindID);
-			fnode = FreindList.freindList.get(msg.idMessage);
+			printMSG(pm.commandMessage, fnode.freindID);
+			fnode = FreindList.freindList.get(pm.idMessage);
 
-			if (checkData(msg.fnameMessage)) {
-				System.out.println(" 중복 데이터 BREAK !!!");
+			if (checkData(pm.fnameMessage)) {
+				System.out.println(" BREAK !!!");
 				break;
 			}
 
 			try {
 				MNT = new Client_NodeThread(fnode);
-				MNT.readyForReceiveUpdateFile_DATA(msg.fidMessage);
+				MNT.readyForReceiveUpdateFile_DATA(pm.fidMessage);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 
 			break;
 		case 9: // "Push":
-			printMSG(msg.commandMessage, fnode.freindID);
-			fnode = FreindList.freindList.get(msg.idMessage);
+			printMSG(pm.commandMessage, fnode.freindID);
+			fnode = FreindList.freindList.get(pm.idMessage);
 
 			try {
 				MNT = new Client_NodeThread(fnode);
@@ -336,14 +307,14 @@ public class ServerThread implements Runnable {
 			break;
 
 		case 10: // "Request_File":
-			fnode = FreindList.freindList.get(msg.idMessage);
+			fnode = FreindList.freindList.get(pm.idMessage);
 
-			printMSG(msg.commandMessage, fnode.freindID);
+			printMSG(pm.commandMessage, fnode.freindID);
 
 			try {
 				socket = Server.fileSocket.accept();
 				UF = new UpdateFiles(socket);
-				UF.SendFile(msg.fnameMessage);
+				UF.SendFile(pm.fnameMessage);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -351,10 +322,10 @@ public class ServerThread implements Runnable {
 
 		case 11: // "MS_ConfirmConnection":
 
-			TOPS_Daemon.myPublicIP = msg.pbipMessage;
-			TOPS_Daemon.myPublicPN = Integer.valueOf(msg.pbpnMessage);
+			TOPS_Daemon.myPublicIP = pm.pbipMessage;
+			TOPS_Daemon.myPublicPN = Integer.valueOf(pm.pbpnMessage);
 
-			printMSG(msg.commandMessage, "LoginServer");
+			printMSG(pm.commandMessage, "LoginServer");
 
 			try {
 				freindIds = FreindList.getEntireFreindList();
@@ -372,11 +343,11 @@ public class ServerThread implements Runnable {
 			break;
 
 		case 12: // "Ask_Connection":
-			fnode = FreindList.freindList.get(msg.idMessage);
+			fnode = FreindList.freindList.get(pm.idMessage);
 
-			printMSG(msg.commandMessage, fnode.freindID);
+			printMSG(pm.commandMessage, fnode.freindID);
 
-			if (fnode != null) { // 친구가 online이면
+			if (fnode != null) { 
 				try {
 					Client.CallConnectToFreindNode(fnode);
 				} catch (UnknownHostException e1) {
@@ -392,30 +363,30 @@ public class ServerThread implements Runnable {
 			break;
 
 		case 13: // "MS_NoticeOnlineFreind":
-			printMSG(msg.commandMessage, "LoginServer");
+			printMSG(pm.commandMessage, "LoginServer");
 
 			System.out.println("NOTICE ONLINE " + message + " "
-					+ msg.fidMessage);
+					+ pm.fidMessage);
 			try {
-				fnode = new FreindNode(msg.fidMessage, msg.pvipMessage,
-						Integer.valueOf(msg.pvpnMessage), msg.pbipMessage,
-						Integer.valueOf(msg.pbpnMessage), null, null, null);
-				FreindList.putOnlineFreind(msg.fidMessage, fnode);
+				fnode = new FreindNode(pm.fidMessage, pm.pvipMessage,
+						Integer.valueOf(pm.pvpnMessage), pm.pbipMessage,
+						Integer.valueOf(pm.pbpnMessage), null, null, null);
+				FreindList.putOnlineFreind(pm.fidMessage, fnode);
 			} catch (Exception e) {
 			}
 
 			break;
 
 		case 14: // "MS_NoticeOfflineFreind":
-			printMSG(msg.commandMessage, "LoginServer");
+			printMSG(pm.commandMessage, "LoginServer");
 			try {
-				FreindList.removeOfflineFreind(msg.fidMessage);
+				FreindList.removeOfflineFreind(pm.fidMessage);
 			} catch (Exception e) {
 			}
 			break;
 
 		case 15: // "MS_ResultOfCheckOnlineFreind":
-			printMSG(msg.commandMessage, "LoginServer");
+			printMSG(pm.commandMessage, "LoginServer");
 
 			if (message.contains("OFFLINE")) {
 				break;
@@ -423,23 +394,21 @@ public class ServerThread implements Runnable {
 
 			if (!message.contains("OFFLINE")) {
 
-				FreindNode newfnode = new FreindNode(msg.fidMessage,
-						msg.pvipMessage, Integer.valueOf(msg.pvpnMessage),
-						msg.pbipMessage, Integer.valueOf(msg.pbpnMessage),
+				FreindNode newfnode = new FreindNode(pm.fidMessage,
+						pm.pvipMessage, Integer.valueOf(pm.pvpnMessage),
+						pm.pbipMessage, Integer.valueOf(pm.pbpnMessage),
 						null, null, null);
 
 				try {
-					FreindList.putOnlineFreind(msg.fidMessage, newfnode);
+					FreindList.putOnlineFreind(pm.fidMessage, newfnode);
 				} catch (NumberFormatException | IOException e) {
 					e.printStackTrace();
 				} 
 
 			}
 
-			fnode = FreindList.freindList.get(msg.fidMessage);
-			if (fnode != null) { // 친구가 online이면
-				chk = true;
-
+			fnode = FreindList.freindList.get(pm.fidMessage);
+			if (fnode != null) { 
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
@@ -476,28 +445,28 @@ public class ServerThread implements Runnable {
 			break;
 
 		case 16: // "MS_ResultOfCheckOnlineFreinds":
-			printMSG(msg.commandMessage, "LoginServer");
+			printMSG(pm.commandMessage, "LoginServer");
 
-			StringTokenizer st = new StringTokenizer(msg.freindsInfoMessage,
+			StringTokenizer st = new StringTokenizer(pm.freindsInfoMessage,
 					";");
 			String freindInfo = "";
 			while (st.hasMoreTokens()) {
 				freindInfo = st.nextToken();
 				System.out.println("Info : " + freindInfo);
 				if (!freindInfo.contains("OFFLINE")) {
-					msg.getFreindPatternfromMSG(message);
+					msg.getFreindPatternfromMSG(message, pm);
 					System.out.println("msg.fi_pvpnMessage : "
-							+ msg.fi_idMessage + " " + msg.fi_pvipMessage + " "
-							+ msg.fi_pvpnMessage + " " + msg.fi_pbipMessage
-							+ " " + msg.fi_pbpnMessage);
-					FreindNode newfnode = new FreindNode(msg.fi_idMessage,
-							msg.fi_pvipMessage,
-							Integer.valueOf(msg.fi_pvpnMessage),
-							msg.fi_pbipMessage,
-							Integer.valueOf(msg.fi_pbpnMessage), null, null,
+							+ pm.fi_idMessage + " " + pm.fi_pvipMessage + " "
+							+ pm.fi_pvpnMessage + " " + pm.fi_pbipMessage
+							+ " " + pm.fi_pbpnMessage);
+					FreindNode newfnode = new FreindNode(pm.fi_idMessage,
+							pm.fi_pvipMessage,
+							Integer.valueOf(pm.fi_pvpnMessage),
+							pm.fi_pbipMessage,
+							Integer.valueOf(pm.fi_pbpnMessage), null, null,
 							null);
 					try {
-						FreindList.putOnlineFreind(msg.fi_idMessage, newfnode);
+						FreindList.putOnlineFreind(pm.fi_idMessage, newfnode);
 					} catch (NumberFormatException | IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -505,8 +474,6 @@ public class ServerThread implements Runnable {
 
 				}
 			}
-
-			chk = false;
 
 			if (FreindList.freindList.size() > 0) {
 				try {
@@ -553,12 +520,12 @@ public class ServerThread implements Runnable {
 //
 //			FD.setVisible(true);			
 
-			TOPS_Server.sendMessage("'dm_RequestAddFriend'"+"!" + msg.idMessage + "!");
+			TOPS_Server.sendMessage("'dm_RequestAddFriend'"+"!" + pm.idMessage + "!");
 			break;
 
 		case 18: // "MS_AllowAddFreind":
-			printMSG(msg.commandMessage, "LoginServer");
-			String freindId = msg.idMessage;
+			printMSG(pm.commandMessage, "LoginServer");
+			String freindId = pm.idMessage;
 
 			boolean exist = false;
 			File freindListFile = new File(TOPS_Daemon.myFolderPath
@@ -576,7 +543,7 @@ public class ServerThread implements Runnable {
 						}
 						if (str.equals(freindId)) {
 							exist = true;
-							System.out.println("이미 등록된 친구 입니다.");
+							System.out.println(" str equals " + freindId);
 						}
 					}
 				} catch (IOException e) {
@@ -588,7 +555,7 @@ public class ServerThread implements Runnable {
 			if (!exist) {
 				FileWriter fw;
 				try {
-					fw = new FileWriter(freindListFile, true); 	// AllowAddFreind가 양쪽에감.
+					fw = new FileWriter(freindListFile, true); 	// AllowAddFreind占쏙옙 占쏙옙占십울옙占쏙옙.
 					fw.write(freindId + "\n");
 					fw.close();
 				} catch (IOException e) {
@@ -609,19 +576,19 @@ public class ServerThread implements Runnable {
 
 			break;
 		case 19: //BloomFilter
-			printMSG(msg.commandMessage, msg.idMessage);
+			printMSG(pm.commandMessage, pm.idMessage);
 			try {
 				MNT = new Client_NodeThread(fnode);
-				MNT.readyForReceive_BloomFilter(msg.fidMessage);
+				MNT.readyForReceive_BloomFilter(pm.fidMessage);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 
 			break;
 		case 20: //Request_BloomFilter
-			printMSG(msg.commandMessage, msg.idMessage);
+			printMSG(pm.commandMessage, pm.idMessage);
 
-			fnode = FreindList.freindList.get(msg.idMessage);
+			fnode = FreindList.freindList.get(pm.idMessage);
 
 			Socket bf_socket = null;
 			try {

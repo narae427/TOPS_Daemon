@@ -1,10 +1,6 @@
 package tops.struct;
 
-import java.io.IOException;
 import java.math.BigInteger;
-import java.security.Key;
-//import biz.source_code.base64Coder.Base64Coder;
-import java.security.PublicKey;
 import java.util.logging.*;
 import java.util.regex.*;
 
@@ -26,28 +22,27 @@ public class Message {
 	Pattern expPattern = Pattern.compile("=.*=");
 	Pattern freindPattern = Pattern.compile(";.*;");
 	
-	public String commandMessage;
-	public String idMessage;
-	public String pvMessage;
-	public String pvipMessage;
-	public String pvpnMessage;
-	public String pbMessage;
-	public String pbipMessage;
-	public String pbpnMessage;
-	public String fidMessage;
-	public String fnameMessage;
-	public String modMessage;
-	public String expMessage;
-	public String freindsInfoMessage;
-	public String bfMessage;
+//	public String commandMessage;
+//	public String idMessage;
+//	public String pvMessage;
+//	public String pvipMessage;
+//	public String pvpnMessage;
+//	public String pbMessage;
+//	public String pbipMessage;
+//	public String pbpnMessage;
+//	public String fidMessage;
+//	public String fnameMessage;
+//	public String modMessage;
+//	public String expMessage;
+//	public String freindsInfoMessage;
 	
-	public String fi_idMessage;
-	public String fi_pvMessage;
-	public String fi_pvipMessage;
-	public String fi_pvpnMessage;
-	public String fi_pbMessage;
-	public String fi_pbipMessage;
-	public String fi_pbpnMessage;
+//	public String fi_idMessage;
+//	public String fi_pvMessage;
+//	public String fi_pvipMessage;
+//	public String fi_pvpnMessage;
+//	public String fi_pbMessage;
+//	public String fi_pbipMessage;
+//	public String fi_pbpnMessage;
 
 	private String getPatternfromMSG(String message, Pattern p) {
 		Pattern pattern = p;
@@ -70,30 +65,30 @@ public class Message {
 			return rstr;
 	}
 	
-	public void getPatternfromMSG(String message) {
-		commandMessage = getPatternfromMSG(message, commandPattern);
-		idMessage = getPatternfromMSG(message, idPattern);
-		pvMessage = getPatternfromMSG(message, pvPattern);
-		pvipMessage = getPatternfromMSG(pvMessage, ipPattern);
-		pvpnMessage = getPatternfromMSG(pvMessage, pnPattern);
-		pbMessage = getPatternfromMSG(message, pbPattern);
-		pbipMessage = getPatternfromMSG(pbMessage, ipPattern);
-		pbpnMessage = getPatternfromMSG(pbMessage, pnPattern);
-		fidMessage = getPatternfromMSG(message, fidPattern);
-		fnameMessage = getPatternfromMSG(message, fnamePattern);
-		modMessage = getPatternfromMSG(message, modPattern);
-		expMessage = getPatternfromMSG(message, expPattern);
-		freindsInfoMessage = getPatternfromMSG(message, freindPattern);
+	public void getPatternfromMSG(String message, PM pm) {
+		pm.commandMessage = getPatternfromMSG(message, commandPattern);
+		pm.idMessage = getPatternfromMSG(message, idPattern);
+		pm.pvMessage = getPatternfromMSG(message, pvPattern);
+		pm.pvipMessage = getPatternfromMSG(pm.pvMessage, ipPattern);
+		pm.pvpnMessage = getPatternfromMSG(pm.pvMessage, pnPattern);
+		pm.pbMessage = getPatternfromMSG(message, pbPattern);
+		pm.pbipMessage = getPatternfromMSG(pm.pbMessage, ipPattern);
+		pm.pbpnMessage = getPatternfromMSG(pm.pbMessage, pnPattern);
+		pm.fidMessage = getPatternfromMSG(message, fidPattern);
+		pm.fnameMessage = getPatternfromMSG(message, fnamePattern);
+		pm.modMessage = getPatternfromMSG(message, modPattern);
+		pm.expMessage = getPatternfromMSG(message, expPattern);
+		pm.freindsInfoMessage = getPatternfromMSG(message, freindPattern);
 	}
 	
-	public void getFreindPatternfromMSG(String message){
-		fi_idMessage = getPatternfromMSG(message, fidPattern);
-		fi_pvMessage = getPatternfromMSG(message, pvPattern);
-		fi_pvipMessage = getPatternfromMSG(pvMessage, ipPattern);
-		fi_pvpnMessage = getPatternfromMSG(pvMessage, pnPattern);
-		fi_pbMessage = getPatternfromMSG(message, pbPattern);
-		fi_pbipMessage = getPatternfromMSG(pbMessage, ipPattern);
-		fi_pbpnMessage = getPatternfromMSG(pbMessage, pnPattern);
+	public void getFreindPatternfromMSG(String message, PM pm){
+		pm.fi_idMessage = getPatternfromMSG(message, fidPattern);
+		pm.fi_pvMessage = getPatternfromMSG(message, pvPattern);
+		pm.fi_pvipMessage = getPatternfromMSG(pm.fi_pvMessage, ipPattern);
+		pm.fi_pvpnMessage = getPatternfromMSG(pm.fi_pvMessage, pnPattern);
+		pm.fi_pbMessage = getPatternfromMSG(message, pbPattern);
+		pm.fi_pbipMessage = getPatternfromMSG(pm.fi_pbMessage, ipPattern);
+		pm.fi_pbpnMessage = getPatternfromMSG(pm.fi_pbMessage, pnPattern);
 	}
 	
 	private void printMSG(String message, String freindId) {

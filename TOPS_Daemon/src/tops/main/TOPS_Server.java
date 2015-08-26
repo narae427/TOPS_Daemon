@@ -5,8 +5,6 @@ import java.net.*;
 import java.security.*;
 import java.security.spec.*;
 import java.util.*;
-import java.util.regex.*;
-
 import tops.struct.*;
 
 
@@ -41,11 +39,12 @@ public class TOPS_Server implements Runnable{
 				line = br.readLine();
 				if(line == null) continue;
 				Message msg = new Message();
-				msg.getPatternfromMSG(line);
+				PM pm = new PM();
+				msg.getPatternfromMSG(line, pm);
 				
-				if(msg.commandMessage.equals("dm_Login")){
+				if(pm.commandMessage.equals("dm_Login")){
 					TOPS_Daemon dm = new TOPS_Daemon();
-					dm.initialize(msg.idMessage);
+					dm.initialize(pm.idMessage);
 					Client_LoginServer MMS = new Client_LoginServer();
 					try {
 						MMS.ConnectToMainServer();
@@ -53,7 +52,7 @@ public class TOPS_Server implements Runnable{
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-				}else if(msg.commandMessage.equals("dm_Logout")){
+				}else if(pm.commandMessage.equals("dm_Logout")){
 					try {
 						Client_LoginServer MMS = new Client_LoginServer();
 						MMS.UnconnectToMainServer();
@@ -62,36 +61,36 @@ public class TOPS_Server implements Runnable{
 					} catch (Exception ee) {
 						System.exit(1);
 					}
-				}else if(msg.commandMessage.equals("dm_AddFriend")){
+				}else if(pm.commandMessage.equals("dm_AddFriend")){
 						try {
 							Client_LoginServer MMS = new Client_LoginServer();
-							MMS.sendMSGtoLoginServer(msg.RequestAddFreindMSG(TOPS_Daemon.myID,	msg.fidMessage));
+							MMS.sendMSGtoLoginServer(msg.RequestAddFreindMSG(TOPS_Daemon.myID,	pm.fidMessage));
 
 						} catch (Exception e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
-					}else if(msg.commandMessage.equals("dm_AllowFriend")){
+					}else if(pm.commandMessage.equals("dm_AllowFriend")){
 						Client_LoginServer MMS = new Client_LoginServer();
-						MMS.sendMSGtoLoginServer(msg.AllowAddFreindMSG(TOPS_Daemon.myID,	msg.fidMessage));
-					}else if(msg.commandMessage.equals("dm_PushData")){
+						MMS.sendMSGtoLoginServer(msg.AllowAddFreindMSG(TOPS_Daemon.myID,	pm.fidMessage));
+					}else if(pm.commandMessage.equals("dm_PushData")){
 						
 						Hashtable<String, Integer> tempIDM = new Hashtable<String, Integer>();
 						if(TOPS_Daemon.IDM.get(TOPS_Daemon.myID) == null || TOPS_Daemon.IDM.get(TOPS_Daemon.myID).get(TOPS_Daemon.myID) == null) tempIDM.put(TOPS_Daemon.myID, 1);
 						else	tempIDM.put(TOPS_Daemon.myID, TOPS_Daemon.IDM.get(TOPS_Daemon.myID).get(TOPS_Daemon.myID)+1);
 						TOPS_Daemon.IDM.put(TOPS_Daemon.myID, tempIDM);
 						
-						Client.CallPushData(msg.fnameMessage);
-					}else if(msg.commandMessage.equals("dm_AdvUpdate")){
+						Client.CallPushData(pm.fnameMessage);
+					}else if(pm.commandMessage.equals("dm_AdvUpdate")){
 						Client.CallAdvertisement_UPDATE();
-					}else if(msg.commandMessage.equals("dm_CmnFriend")){
-						BFilter.calcCommonFriend(msg.fidMessage);
+					}else if(pm.commandMessage.equals("dm_CmnFriend")){
+						BFilter.calcCommonFriend(pm.fidMessage);
 					}
 				}
 //			pw.close();
 //			br.close();
 //			sock.close();
-//			System.out.println("¼ÒÄÏ´ÝÈû");
+//			System.out.println("ï¿½ï¿½ï¿½Ï´ï¿½ï¿½ï¿½");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

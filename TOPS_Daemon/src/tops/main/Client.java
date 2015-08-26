@@ -184,7 +184,6 @@ public class Client extends Thread {
 //		CFNS.start();
 //	}
 
-	@SuppressWarnings("static-access")
 	public void run() {
 		try {
 			mainSocket = new ReliableSocket();
@@ -316,7 +315,7 @@ class ExchangePublicKey extends Client implements Runnable {
 			} else {
 				Message msg = new Message();
 				String keyMSG = msg.SendPublicKey(TOPS_Daemon.pubMod, TOPS_Daemon.pubExp);
-				ArrayList<Client_NodeThread> MNTList = new ArrayList<Client_NodeThread>();
+//				ArrayList<Client_NodeThread> MNTList = new ArrayList<Client_NodeThread>();
 
 				for (FreindNode fNode : FreindList.freindList.values()) {
 					try {

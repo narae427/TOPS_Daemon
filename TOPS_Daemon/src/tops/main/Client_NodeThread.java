@@ -1,19 +1,7 @@
 package tops.main;
 import java.io.*;
 import java.net.*;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.spec.InvalidKeySpecException;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-
 import tops.struct.*;
-import net.rudp.*;
 
 public class Client_NodeThread extends Thread {
 	protected FreindNode fNode = null;
@@ -95,7 +83,7 @@ public class Client_NodeThread extends Thread {
 		}
 		
 		UF = new UpdateFiles(socket);
-		UF.ReceiveFile(fileName); // fName ÀÌ¸§À» °¡Áø ÆÄÀÏÀ» ¹ÞÀ»ÁØºñ¸¦ ÇÔ.
+		UF.ReceiveFile(fileName); // fName ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Øºï¿½ ï¿½ï¿½.
 		socket.close();
 		}
 	}
@@ -112,7 +100,7 @@ public class Client_NodeThread extends Thread {
 				System.out.println();
 				System.out.println("*** CLIENT "
 						+ "**************************************"
-						+ fNode.publicPN + "Á¢¼Ó ½ÇÆÐ");
+						+ fNode.publicPN + "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
 				System.out.println();
 				e.printStackTrace();
 			}
