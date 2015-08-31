@@ -454,19 +454,19 @@ public class ServerThread implements Runnable {
 				freindInfo = st.nextToken();
 				System.out.println("Info : " + freindInfo);
 				if (!freindInfo.contains("OFFLINE")) {
-					msg.getFreindPatternfromMSG(message, pm);
+					msg.getPatternfromMSG(freindInfo, pm);
 					System.out.println("msg.fi_pvpnMessage : "
-							+ pm.fi_idMessage + " " + pm.fi_pvipMessage + " "
-							+ pm.fi_pvpnMessage + " " + pm.fi_pbipMessage
-							+ " " + pm.fi_pbpnMessage);
-					FreindNode newfnode = new FreindNode(pm.fi_idMessage,
-							pm.fi_pvipMessage,
-							Integer.valueOf(pm.fi_pvpnMessage),
-							pm.fi_pbipMessage,
-							Integer.valueOf(pm.fi_pbpnMessage), null, null,
+							+ pm.fidMessage + " " + pm.pvipMessage + " "
+							+ pm.pvpnMessage + " " + pm.pbipMessage
+							+ " " + pm.pbpnMessage);
+					FreindNode newfnode = new FreindNode(pm.fidMessage,
+							pm.pvipMessage,
+							Integer.valueOf(pm.pvpnMessage),
+							pm.pbipMessage,
+							Integer.valueOf(pm.pbpnMessage), null, null,
 							null);
 					try {
-						FreindList.putOnlineFreind(pm.fi_idMessage, newfnode);
+						FreindList.putOnlineFreind(pm.fidMessage, newfnode);
 					} catch (NumberFormatException | IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -503,22 +503,6 @@ public class ServerThread implements Runnable {
 			break;
 
 		case 17: // "MS_RequestAddFreind":
-//			printMSG(msg.commandMessage, "LoginServer");
-//
-//			addFreindDialog FD = new addFreindDialog(msg.idMessage);
-//			FD.setSize(300, 150);
-//			Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-//			Dimension frm = FD.getSize();
-//
-//			// int frameX = frame.getX();
-//			// int frameY = frame.getY();
-//			int xpos = (int) (screen.getWidth() / 2 - frm.getWidth() / 2);
-//			int ypos = (int) (screen.getHeight() / 2 - frm.getHeight() / 2);
-//
-//			FD.setLocation(xpos, ypos);
-//			FD.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-//
-//			FD.setVisible(true);			
 
 			TOPS_Server.sendMessage("'dm_RequestAddFriend'"+"!" + pm.idMessage + "!");
 			break;

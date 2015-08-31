@@ -463,6 +463,10 @@ public class UpdateFiles {
 		for (File f : tempFiles) {
 			String id = f.getName().substring(0,
 					f.getName().indexOf("_UpdateFile"));
+			
+			System.out.println("ERROR :  " + fnode + " " + fnode.freindID);
+			
+			System.out.println("ERROR :  " + fnode + " " + fnode.freindID + " " + fnode.bloomFilter);
 			if (fnode.bloomFilter.mightContain(id))
 				fileArr.add(f);
 		}

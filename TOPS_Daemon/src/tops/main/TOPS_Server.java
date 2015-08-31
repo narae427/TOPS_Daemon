@@ -26,6 +26,7 @@ public class TOPS_Server implements Runnable{
 		ServerSocket server;
 		try {
 			ServerPN = (int) (Math.random()*10010+10000);
+			System.out.println("Daemon_ServerPN " + ServerPN);
 			server = new ServerSocket(ServerPN);
 			sock = server.accept();
 			out = sock.getOutputStream();

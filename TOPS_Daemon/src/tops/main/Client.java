@@ -46,7 +46,7 @@ public class Client extends Thread {
 			if(reciever == ctor) continue;
 			if(TOPS_Daemon.IDM.get(reciever).get(ctor)==null) return true;
 //			if(TOPS.IDM.get(TOPS.myID).get(ctor)==null) continue;
-			if(TOPS_Daemon.IDM.get(reciever).get(ctor) < TOPS_Daemon.IDM.get(TOPS_Daemon.myID).get(ctor))
+			if(TOPS_Daemon.IDM.get(reciever).get(ctor) < TOPS_Daemon.IDM.get(TOPS_Daemon.myID).get(ctor))////////////ERROR
 				return true;
 		}
 		return false;
@@ -89,7 +89,7 @@ public class Client extends Thread {
 		}
 		try {
 			if (encrypt)
-				message = RSAcrypto.encrypt(node.freindID, message);
+				message = RSAcrypto.encrypt(node.freindID, message); ////////////ERROR
 		} catch (InvalidKeyException | NoSuchAlgorithmException
 				| NoSuchPaddingException | IllegalBlockSizeException
 				| BadPaddingException | InvalidKeySpecException
@@ -178,12 +178,6 @@ public class Client extends Thread {
 		CFN.start();
 	}
 
-//	static public void CallConnectToFreindNodes() throws UnknownHostException,
-//			IOException {
-//		ConnectFreindNodes CFNS = new ConnectFreindNodes();
-//		CFNS.start();
-//	}
-
 	public void run() {
 		try {
 			mainSocket = new ReliableSocket();
@@ -193,14 +187,6 @@ public class Client extends Thread {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-//		Client_LoginServer MMS = new Client_LoginServer();
-//		try {
-//			MMS.ConnectToMainServer();
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
 
 	}
 }
@@ -344,7 +330,6 @@ class ConnectFreindNode extends Client implements Runnable {
 
 	public void run() {
 
-//		Client.CallAdvertisement_BloomFilter();
 		Client_NodeThread MNT = null;
 		try {
 			MNT = new Client_NodeThread(fNode);
@@ -366,7 +351,6 @@ class ConnectFreindNodes extends Client implements Runnable {
 
 	public void run() {
 
-//		Client.CallAdvertisement_BloomFilter();
 		ArrayList<Client_NodeThread> MNTList = new ArrayList<Client_NodeThread>();
 
 		for (FreindNode fNode : FreindList.freindList.values()) {
