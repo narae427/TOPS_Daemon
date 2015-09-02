@@ -54,14 +54,8 @@ public class TOPS_Server implements Runnable{
 						e.printStackTrace();
 					}
 				}else if(pm.commandMessage.equals("dm_Logout")){
-					try {
 						Client_LoginServer MMS = new Client_LoginServer();
 						MMS.UnconnectToMainServer();
-						Thread.sleep(5000);
-						System.exit(0);
-					} catch (Exception ee) {
-						System.exit(1);
-					}
 				}else if(pm.commandMessage.equals("dm_AddFriend")){
 						try {
 							Client_LoginServer MMS = new Client_LoginServer();
