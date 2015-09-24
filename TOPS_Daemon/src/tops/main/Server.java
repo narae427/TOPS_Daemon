@@ -18,6 +18,7 @@ public class Server implements Runnable {
 
 	static ReliableSocket socket = null;
 	static ServerSocket fileSocket = null;
+	static ServerSocket dm_fileSocket = null;
 	final Thread serverThread;
 
 	volatile boolean started = false;

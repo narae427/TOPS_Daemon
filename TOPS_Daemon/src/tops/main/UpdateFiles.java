@@ -31,6 +31,12 @@ public class UpdateFiles {
 	File myUpdateFilePath = new File(myFolderPath
 			+ System.getProperty("file.separator") + "UpdateFile");
 
+	DataOutputStream dos = null;
+	DataInputStream dis = null;
+
+	FileInputStream fin = null;
+	BufferedInputStream bis = null;
+
 	public UpdateFiles(Socket socket) {
 		this.socket = socket;
 	}
@@ -38,6 +44,7 @@ public class UpdateFiles {
 	/*
 	 * UpdateFile을 읽어와서 적용시킨다.
 	 */
+
 	public void DoUpdate(MessageType msgType, FreindNode fNode)
 			throws Exception {
 		System.out.println();
@@ -69,7 +76,8 @@ public class UpdateFiles {
 			String[] fileNameTokens = f.getName().split("_");
 			String id = fileNameTokens[0];
 
-			int oldVersion = TOPS_Daemon.freindVerHT.get(id); // 내가 가지고 있는 친구의 최고 버전
+			int oldVersion = TOPS_Daemon.freindVerHT.get(id); // 내가 가지고 있는 친구의
+																// 최고 버전
 			int newVersion = 0;
 			System.out.println(" ~ " + f.getName() + "의 구버전 : " + oldVersion);
 			while (true) {
@@ -153,7 +161,7 @@ public class UpdateFiles {
 		}
 
 		TOPS_Server.sendMessage("'dm_ListUpdate'");
-		
+
 		System.out
 				.println("===============================================================");
 		System.out.println();
@@ -463,10 +471,11 @@ public class UpdateFiles {
 		for (File f : tempFiles) {
 			String id = f.getName().substring(0,
 					f.getName().indexOf("_UpdateFile"));
-			
+
 			System.out.println("ERROR :  " + fnode + " " + fnode.freindID);
-			
-			System.out.println("ERROR :  " + fnode + " " + fnode.freindID + " " + fnode.bloomFilter);
+
+			System.out.println("ERROR :  " + fnode + " " + fnode.freindID + " "
+					+ fnode.bloomFilter);
 			if (fnode.bloomFilter.mightContain(id))
 				fileArr.add(f);
 		}

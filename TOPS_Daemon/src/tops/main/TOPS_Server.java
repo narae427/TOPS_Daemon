@@ -5,11 +5,12 @@ import java.net.*;
 import java.security.*;
 import java.security.spec.*;
 import java.util.*;
+
 import tops.struct.*;
 
 
 public class TOPS_Server implements Runnable{
-	Socket sock = null;
+	public static Socket sock = null;
 	String line = null;
 	OutputStream out = null;
 	InputStream in = null;
@@ -25,7 +26,8 @@ public class TOPS_Server implements Runnable{
 		// TODO Auto-generated method stub
 		ServerSocket server;
 		try {
-			ServerPN = (int) (Math.random()*10010+10000);
+//			ServerPN = (int) (Math.random()*10010+10000); ////////////////////////////////////////////////////////////HNR
+			ServerPN = 9626;
 			System.out.println("Daemon_ServerPN " + ServerPN);
 			server = new ServerSocket(ServerPN);
 			sock = server.accept();
@@ -39,6 +41,7 @@ public class TOPS_Server implements Runnable{
 			while(true){
 				line = br.readLine();
 				if(line == null) continue;
+				System.out.println("LINE : " + line);
 				Message msg = new Message();
 				PM pm = new PM();
 				msg.getPatternfromMSG(line, pm);
@@ -53,6 +56,9 @@ public class TOPS_Server implements Runnable{
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+					sendMessage("'dm_ListUpdate'");
+					
+					
 				}else if(pm.commandMessage.equals("dm_Logout")){
 						Client_LoginServer MMS = new Client_LoginServer();
 						MMS.UnconnectToMainServer();
@@ -80,12 +86,29 @@ public class TOPS_Server implements Runnable{
 						Client.CallAdvertisement_UPDATE();
 					}else if(pm.commandMessage.equals("dm_CmnFriend")){
 						BFilter.calcCommonFriend(pm.fidMessage);
+					}else if(pm.commandMessage.equals("dm_Request_Updates")){
+						System.out.println("RECIEVE dm_Request_Updates");
+						TOPS_Sync sync = new TOPS_Sync();
+						try {
+							sync.DoSynchronize();
+						} catch (IOException e2) {
+							// TODO Auto-generated catch block
+							e2.printStackTrace();
+						}
+						
+					}
+					else if(pm.commandMessage.equals("dm_Request_File")){
+						
+						try {
+							Socket socket = Server.fileSocket.accept();
+							UpdateFiles UF = new UpdateFiles(socket);
+							UF.SendFile(pm.fnameMessage);
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+						
 					}
 				}
-//			pw.close();
-//			br.close();
-//			sock.close();
-//			System.out.println("���ϴ���");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

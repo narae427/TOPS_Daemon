@@ -1,12 +1,12 @@
 #Fat Jar Configuration File
-#Mon Dec 01 11:11:59 KST 2014
+#Thu Sep 10 18:23:58 KST 2015
 onejar.license.required=true
 manifest.classpath=
 manifest.removesigners=true
 onejar.checkbox=false
-jarname=TOPS_fat.jar
+jarname=Daemon_fat.jar
 manifest.mergeall=true
-manifest.mainclass=TOPS
+manifest.mainclass=tops.main.TOPS_Daemon
 manifest.file=<createnew>
 jarname.isextern=false
 onejar.expand=

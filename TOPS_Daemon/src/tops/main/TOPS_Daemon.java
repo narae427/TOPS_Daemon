@@ -48,21 +48,8 @@ public class TOPS_Daemon {
 	static int DHG = 7;
 
 	public static void main(String[] args) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
-//		myPrivateIP = InetAddress.getLocalHost().getHostAddress();
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					myPrivateIP = InetAddress.getLocalHost().getHostAddress();
-//					myOS = System.getProperty("os.name");
-//					TOPS tops = new TOPS();
-//
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//		TOPS tops = new TOPS();
-		
+			TOPS_Daemon daemon = new TOPS_Daemon();
+			daemon.executeServer();
 	}
 
 	public TOPS_Daemon() {
@@ -84,7 +71,7 @@ public class TOPS_Daemon {
 		myHomePath = HomeDir;
 		System.out.println("Daemon Home Directory :" + HomeDir);
 		File MyDir = new File(HomeDir
-				+ System.getProperty("file.separator") + "TOPS"
+				+ System.getProperty("file.separator") + "TOPS_Daemon"
 				+ System.getProperty("file.separator") + myID);
 		if (!MyDir.exists()) {
 			MyDir.mkdirs();
