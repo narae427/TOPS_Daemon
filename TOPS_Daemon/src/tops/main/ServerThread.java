@@ -339,6 +339,8 @@ public class ServerThread implements Runnable {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+			
+			TOPS_Server.sendMessage("'dm_ListUpdate'");
 
 			break;
 

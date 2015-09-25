@@ -1,17 +1,13 @@
 package tops.main;
 
-import java.io.BufferedInputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.net.Socket;
+import java.io.*;
+import java.net.*;
+import java.util.*;
 
 import tops.struct.*;
 
 public class TOPS_Sync {
-	Socket socket = TOPS_Server.sock;
+	Socket socket = null;
 	static String myFolderPath = TOPS_Daemon.myFolderPath;
 	Message msg = new Message();
 	File myUpdateFilePath = new File(myFolderPath
@@ -23,12 +19,18 @@ public class TOPS_Sync {
 	FileInputStream fin = null;
 	BufferedInputStream bis = null;
 
-	public TOPS_Sync() {
+	public TOPS_Sync() throws IOException {
+		this.socket = Server.dm_fileSocket.accept();
+
+		try {
+			dos = new DataOutputStream(socket.getOutputStream());
+			dis = new DataInputStream(socket.getInputStream());
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
 
-	/*
-	 * UpdateFile을 읽어와서 적용시킨다.
-	 */
 	public File[] getFiles(File dir) {
 		File[] files = null;
 		File dirFile = new File(dir.getPath());
@@ -39,7 +41,6 @@ public class TOPS_Sync {
 
 	public void sendFiles(File[] files) throws IOException {
 
-		System.out.println("sendFIles");
 		for (File f : files) {
 			if (f.isDirectory()) {
 				File[] dFiles = getFiles(f);
@@ -48,11 +49,17 @@ public class TOPS_Sync {
 
 				String filePath = f.getPath();
 				String fileName = f.getName();
-				
-				System.out.println("Send File : " + filePath + " * " + fileName);
+
+				System.out
+						.println("Send File : " + filePath + " * " + fileName);
 
 				dos.writeUTF(filePath);
 				dos.writeUTF(fileName);
+
+				String yn = dis.readUTF(); // 중복파일인지 아닌지
+				if (yn.equals("NO")) {
+					continue;
+				}
 
 				fin = new FileInputStream(f);
 				bis = new BufferedInputStream(fin);
@@ -77,33 +84,120 @@ public class TOPS_Sync {
 
 	}
 
-	public void DoSynchronize() throws IOException {
+	public void DoSynchronize_Send() throws IOException {
 		File dmPath = new File(TOPS_Daemon.myHomePath
 				+ System.getProperty("file.separator") + "TOPS_Daemon");
 		File[] dmFile = null;
 		dmFile = dmPath.listFiles();
 
-		System.out.println("dmPath : " + dmPath);
-
-		try {
-			dos = new DataOutputStream(socket.getOutputStream());
-			dis = new DataInputStream(socket.getInputStream());
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
 		sendFiles(dmFile);
-		
 
 		try {
 			dos.writeUTF("FINISH");
-		
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
+	}
+
+	public void DoSynchronize_Recieve() throws IOException {
+		DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
+		DataInputStream dis = new DataInputStream(socket.getInputStream());
+		FileOutputStream fos = null;
+		BufferedOutputStream bos = null;
+
+		while (true) {
+			boolean recieve = true;
+			String filePath = dis.readUTF();
+
+			if (filePath.equals("FINISH")) {
+				break;
+			}
+
+			String fileName = dis.readUTF();
+
+			String[] filePathTokens = filePath.split("TOPS");
+			String newFile = filePathTokens[1];
+
+			File newFilePath = new File(TOPS_Daemon.myHomePath
+					+ System.getProperty("file.separator") + "TOPS_Daemon"
+					+ System.getProperty("file.separator") + newFile); // updatefile
+
+			String[] fileNameTokens = fileName.split("_UpdateFile_");
+			final String newFileName = fileNameTokens[0];
+
+			if (newFilePath.toString().contains("_UpdateFile_")) {
+				System.out
+						.println("========================================================================= "
+								+ filePath);
+				int newVer = Integer.valueOf(fileNameTokens[1]);
+
+				System.out
+						.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+								+ fileNameTokens[0] + " " + fileNameTokens[1]);
+				int oldVer = -1;
+
+				File[] udFile = null;
+				udFile = newFilePath.getParentFile().listFiles(
+						new FilenameFilter() {
+
+							@Override
+							public boolean accept(File dir, String name) {
+								// TODO Auto-generated method stub
+								return name.startsWith(newFileName);
+							}
+
+						});
+
+				if (udFile != null) {
+					for (File f : udFile) {
+						System.out
+								.println("----------------------------------------------------------------------------------------------------------------------------------------------udFIle : "
+										+ f.getName());
+						final String[] vTokens = f.getName().split(
+								"_UpdateFile_");
+						oldVer = Integer.valueOf(fileNameTokens[1]);
+						if (oldVer > newVer)
+							recieve = false;
+						else
+							f.delete();
+					}
+				}
+
+			}
+			if (newFilePath.exists())
+				recieve = false;
+
+			if (!recieve) {
+				dos.writeUTF("NO");
+				continue;
+			} else {
+				dos.writeUTF("YES");
+			}
+
+			if (!newFilePath.exists()) {
+				newFilePath.getParentFile().mkdirs();
+			}
+			fos = new FileOutputStream(newFilePath);
+			bos = new BufferedOutputStream(fos);
+			long fileSize = dis.readLong();
+			byte[] buffer = new byte[(int) fileSize];
+			int data = 0;
+
+			data = dis.read(buffer);
+			bos.write(buffer, 0, data);
+			bos.flush();
+
+			try {
+				bos.close();
+				fos.close();
+			} catch (Exception e) {
+
+			}
+
+		}
 	}
 
 }

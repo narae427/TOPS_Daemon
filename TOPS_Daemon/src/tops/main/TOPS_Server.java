@@ -56,12 +56,13 @@ public class TOPS_Server implements Runnable{
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					sendMessage("'dm_ListUpdate'");
+					
 					
 					
 				}else if(pm.commandMessage.equals("dm_Logout")){
 						Client_LoginServer MMS = new Client_LoginServer();
 						MMS.UnconnectToMainServer();
+						break;
 				}else if(pm.commandMessage.equals("dm_AddFriend")){
 						try {
 							Client_LoginServer MMS = new Client_LoginServer();
@@ -76,6 +77,11 @@ public class TOPS_Server implements Runnable{
 						MMS.sendMSGtoLoginServer(msg.AllowAddFreindMSG(TOPS_Daemon.myID,	pm.fidMessage));
 					}else if(pm.commandMessage.equals("dm_PushData")){
 						
+						sendMessage("'dm_Sync'");
+
+						TOPS_Sync sync = new TOPS_Sync();
+						sync.DoSynchronize_Recieve();
+						
 						Hashtable<String, Integer> tempIDM = new Hashtable<String, Integer>();
 						if(TOPS_Daemon.IDM.get(TOPS_Daemon.myID) == null || TOPS_Daemon.IDM.get(TOPS_Daemon.myID).get(TOPS_Daemon.myID) == null) tempIDM.put(TOPS_Daemon.myID, 1);
 						else	tempIDM.put(TOPS_Daemon.myID, TOPS_Daemon.IDM.get(TOPS_Daemon.myID).get(TOPS_Daemon.myID)+1);
@@ -86,26 +92,20 @@ public class TOPS_Server implements Runnable{
 						Client.CallAdvertisement_UPDATE();
 					}else if(pm.commandMessage.equals("dm_CmnFriend")){
 						BFilter.calcCommonFriend(pm.fidMessage);
-					}else if(pm.commandMessage.equals("dm_Request_Updates")){
-						System.out.println("RECIEVE dm_Request_Updates");
+					}else if(pm.commandMessage.equals("dm_Sync")){
+						
+						
 						TOPS_Sync sync = new TOPS_Sync();
 						try {
-							sync.DoSynchronize();
+							sync.DoSynchronize_Send();
 						} catch (IOException e2) {
 							// TODO Auto-generated catch block
 							e2.printStackTrace();
 						}
+						sendMessage("'dm_Sync'");
 						
-					}
-					else if(pm.commandMessage.equals("dm_Request_File")){
-						
-						try {
-							Socket socket = Server.fileSocket.accept();
-							UpdateFiles UF = new UpdateFiles(socket);
-							UF.SendFile(pm.fnameMessage);
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
+						sync = new TOPS_Sync();
+						sync.DoSynchronize_Recieve();
 						
 					}
 				}

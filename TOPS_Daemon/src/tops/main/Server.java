@@ -44,6 +44,7 @@ public class Server implements Runnable {
 		serverSocket = new ReliableServerSocket();
 		TOPS_Daemon.myPrivatePN = serverSocket.getLocalPort();
 		fileSocket = new ServerSocket(TOPS_Daemon.myPrivatePN);
+		dm_fileSocket = new ServerSocket(9262);
 		serverThread = new Thread(this);
 	}
 

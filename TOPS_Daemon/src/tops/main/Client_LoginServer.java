@@ -51,6 +51,7 @@ public class Client_LoginServer {
     	try {		
     		String freindIds = FreindList.getEntireFreindList();	
     		sendMSGtoLoginServer(msg.UnconnectionAlertMSGforMainServer(freindIds));
+    		
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
