@@ -58,8 +58,9 @@ public class TOPS_Daemon {
 //		new Thread(server).start();
 	}
 	
-	public void executeServer(){
-		TOPS_Server server = new TOPS_Server();
+	public void executeServer() throws IOException{
+		TOPS_Server server = null;
+		server = new TOPS_Server(server);
 		new Thread(server).start();
 	}
 	

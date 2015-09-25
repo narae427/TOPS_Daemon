@@ -50,9 +50,6 @@ public class TOPS_Sync {
 				String filePath = f.getPath();
 				String fileName = f.getName();
 
-				System.out
-						.println("Send File : " + filePath + " * " + fileName);
-
 				dos.writeUTF(filePath);
 				dos.writeUTF(fileName);
 
@@ -129,14 +126,8 @@ public class TOPS_Sync {
 			final String newFileName = fileNameTokens[0];
 
 			if (newFilePath.toString().contains("_UpdateFile_")) {
-				System.out
-						.println("========================================================================= "
-								+ filePath);
 				int newVer = Integer.valueOf(fileNameTokens[1]);
 
-				System.out
-						.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-								+ fileNameTokens[0] + " " + fileNameTokens[1]);
 				int oldVer = -1;
 
 				File[] udFile = null;
@@ -153,9 +144,6 @@ public class TOPS_Sync {
 
 				if (udFile != null) {
 					for (File f : udFile) {
-						System.out
-								.println("----------------------------------------------------------------------------------------------------------------------------------------------udFIle : "
-										+ f.getName());
 						final String[] vTokens = f.getName().split(
 								"_UpdateFile_");
 						oldVer = Integer.valueOf(fileNameTokens[1]);
