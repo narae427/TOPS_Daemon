@@ -44,9 +44,6 @@ public class TOPS_Daemon {
 	public static BigInteger privMod = null;
 	public static BigInteger privExp = null;
 
-	static int DHP = 7001;
-	static int DHG = 7;
-
 	public static void main(String[] args) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
 			TOPS_Daemon daemon = new TOPS_Daemon();
 			daemon.executeServer();
@@ -54,14 +51,18 @@ public class TOPS_Daemon {
 
 	public TOPS_Daemon() {
 		
-//		TOPS_Server server = new TOPS_Server();
-//		new Thread(server).start();
 	}
 	
 	public void executeServer() throws IOException{
-		TOPS_Server server = null;
-		server = new TOPS_Server(server);
-		new Thread(server).start();
+		TOPS_Server topsServer = null;
+		topsServer = new TOPS_Server(topsServer);
+		topsServer.dmServerSocket = getAvailablePortSocket();
+		topsServer.dmFileSocket = getAvailablePortSocket();
+		topsServer.server = topsServer.dmServerSocket;
+		topsServer. ServerPN = topsServer.dmServerSocket.getLocalPort();
+		topsServer.FilePN = topsServer.dmFileSocket.getLocalPort();
+		
+		new Thread(topsServer).start();
 	}
 	
 	@SuppressWarnings("static-access")
@@ -94,12 +95,8 @@ public class TOPS_Daemon {
 			RSAPrivateKeySpec priv = fact.getKeySpec(kp.getPrivate(),
 					RSAPrivateKeySpec.class);
 
-			// RSAcrypto.saveToFile(TOPS.myID + "public.key",
-			// pub.getModulus(), pub.getPublicExponent());
 			pubMod = pub.getModulus();
 			pubExp = pub.getPublicExponent();
-			// RSAcrypto.saveToFile(TOPS.myID + "private.key",
-			// priv.getModulus(), priv.getPrivateExponent());
 			privMod = priv.getModulus();
 			privExp = priv.getPrivateExponent();
 
@@ -177,23 +174,19 @@ public class TOPS_Daemon {
 		return strTime;
 	}
 
-	static public int getAvailablePortNumber() {
-		int availablePortNumber = 0;
+	static public ServerSocket  getAvailablePortSocket() {
 		for (int pn = 1024; pn < 65535; pn++) {
 			try {
-				ReliableServerSocket socket = new ReliableServerSocket(pn);
+				ServerSocket socket = new ServerSocket(pn);
 				socket.setReuseAddress(true);
-				availablePortNumber = pn;
-				socket.close();
-				return availablePortNumber;
+				return socket;
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				continue;
 			}
 
 		}
-
-		return -1;
+		return null;
 	}
 
 }

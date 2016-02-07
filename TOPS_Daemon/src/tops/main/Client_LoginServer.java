@@ -8,7 +8,6 @@ import net.rudp.*;
 public class Client_LoginServer {
 	int MS_SendPortNumber = 8089; //13339
 	
-	//int _MS_SendPortNumber = 8081;
 	Message msg = new Message();
 	
 

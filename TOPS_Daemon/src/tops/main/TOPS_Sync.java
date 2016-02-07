@@ -40,7 +40,6 @@ public class TOPS_Sync {
 	}
 
 	public void sendFiles(File[] files) throws IOException {
-
 		for (File f : files) {
 			if (f.isDirectory()) {
 				File[] dFiles = getFiles(f);
@@ -53,7 +52,7 @@ public class TOPS_Sync {
 				dos.writeUTF(filePath);
 				dos.writeUTF(fileName);
 
-				String yn = dis.readUTF(); // Áßº¹ÆÄÀÏÀÎÁö ¾Æ´ÑÁö
+				String yn = dis.readUTF(); // ì¤‘ë³µíŒŒì¼ì¸ì§€ ì•„ë‹Œì§€
 				if (yn.equals("NO")) {
 					continue;
 				}
@@ -68,7 +67,9 @@ public class TOPS_Sync {
 				data = bis.read(buffer);
 				dos.write(buffer, 0, data);
 				dos.flush();
-
+				System.out.print("GUIì—ê²Œ íŒŒì¼ë³´ëƒ„ : "+ fileName + " ë‚´ìš© : " );
+				System.out.write(buffer);
+				System.out.println();
 				try {
 					bis.close();
 					fin.close();
@@ -82,8 +83,7 @@ public class TOPS_Sync {
 	}
 
 	public void DoSynchronize_Send() throws IOException {
-		File dmPath = new File(TOPS_Daemon.myHomePath
-				+ System.getProperty("file.separator") + "TOPS_Daemon");
+		File dmPath = new File(TOPS_Daemon.myFolderPath);
 		File[] dmFile = null;
 		dmFile = dmPath.listFiles();
 
@@ -121,6 +121,7 @@ public class TOPS_Sync {
 			File newFilePath = new File(TOPS_Daemon.myHomePath
 					+ System.getProperty("file.separator") + "TOPS_Daemon"
 					+ System.getProperty("file.separator") + newFile); // updatefile
+			System.out.println("ë­¥ë¯¸ : " + newFilePath);
 
 			String[] fileNameTokens = fileName.split("_UpdateFile_");
 			final String newFileName = fileNameTokens[0];
@@ -144,8 +145,6 @@ public class TOPS_Sync {
 
 				if (udFile != null) {
 					for (File f : udFile) {
-						final String[] vTokens = f.getName().split(
-								"_UpdateFile_");
 						oldVer = Integer.valueOf(fileNameTokens[1]);
 						if (oldVer > newVer)
 							recieve = false;

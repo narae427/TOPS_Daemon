@@ -45,7 +45,7 @@ public class UpdateFiles {
 	 * UpdateFile을 읽어와서 적용시킨다.
 	 */
 
-	public void DoUpdate(MessageType msgType, FreindNode fNode)
+	public synchronized void DoUpdate(MessageType msgType, FreindNode fNode)
 			throws Exception {
 		System.out.println();
 		System.out
@@ -88,14 +88,7 @@ public class UpdateFiles {
 					break;
 
 				if (str.substring(0, 7).equals("VERSION")) {
-					newVersion = Integer.valueOf(str.substring(8)); // 새로 들어온
-																	// updateFile
-																	// 에 있는 버전
-					// if(newVersion <= oldVersion){
-					// String trashStr = reader.readLine(); //write 이나 delete읽어서
-					// 버림.
-					// continue;
-					// }
+					newVersion = Integer.valueOf(str.substring(8)); 
 				}
 
 				if (str.substring(0, 7).equals("[Write]")) {
@@ -171,10 +164,6 @@ public class UpdateFiles {
 	public void ReceiveFile(String fileName) throws IOException {
 		DataInputStream dis = new DataInputStream(socket.getInputStream());
 
-		/*
-		 * if(fileName.equals("FINISH")){ //dos.writeUTF("FINISH"); return; }
-		 */
-		// dos.writeUTF(fileName); //어떤 파일을 받아야하는지
 		String[] fileNameTokens = fileName.split("_");
 		String id = fileNameTokens[0];
 
@@ -185,13 +174,13 @@ public class UpdateFiles {
 		long fileLength = dis.readLong();
 		long FileLengthFinal = fileLength;
 
-		// long picFileLength = picFile.length();
 		int fileTotalBuffer = 0;
+		byte[] buffer = null;
 		while (true) {
 			if (fileTotalBuffer == FileLengthFinal) {
 				break;
 			}
-			byte[] buffer = new byte[(int) fileLength];
+			buffer = new byte[(int) fileLength];
 			int data = 0;
 			data = dis.read(buffer);
 			bos.write(buffer, 0, data);
@@ -201,12 +190,10 @@ public class UpdateFiles {
 			fileLength -= data;
 
 		}
-
-		/*
-		 * byte[] buffer = new byte[(int)fileSize]; int data = 0;
-		 * 
-		 * data = dis.read(buffer); bos.write(buffer, 0, data); bos.flush();
-		 */
+		System.out.print("받은 파일 이름 : " + fileName + " 내용 : " );
+		System.out.write(buffer);
+		System.out.println();
+	
 		String pictureName = dis.readUTF();
 		if (pictureName.equals("NoPicture")) {
 
@@ -224,7 +211,6 @@ public class UpdateFiles {
 			long picFileLength = dis.readLong();
 			long picFileLengthFinal = picFileLength;
 
-			// long picFileLength = picFile.length();
 			int totalBuffer = 0;
 			while (true) {
 				if (totalBuffer == picFileLengthFinal) {
@@ -250,7 +236,6 @@ public class UpdateFiles {
 	public int SendFile(String fileName) throws IOException {
 		DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
 
-		// String fileName = dis.readUTF(); //어떤 파일을 보내주어야하는지
 		if (fileName.equals("FINISH")) {
 			return -1;
 		}
@@ -273,11 +258,12 @@ public class UpdateFiles {
 
 		long FileLength = f.length();
 		int fileTotalBuffer = 0;
+		byte[] buffer = null;
 		while (true) {
 			if (fileTotalBuffer == f.length()) {
 				break;
 			}
-			byte[] buffer = new byte[(int) FileLength];
+			buffer = new byte[(int) FileLength];
 			int data = 0;
 			data = bis.read(buffer);
 			dos.write(buffer, 0, data);
@@ -285,7 +271,9 @@ public class UpdateFiles {
 			fileTotalBuffer += data;
 			FileLength -= data;
 		}
-
+		System.out.print("보내는 파일 이름 : " + fileName + " 내용 : " );
+		System.out.write(buffer);
+		System.out.println();
 		LineNumberReader reader = new LineNumberReader(new FileReader(f));
 		String firstLine = reader.readLine(); // 그림파일 경로
 		reader.close();
@@ -341,7 +329,7 @@ public class UpdateFiles {
 
 	}
 
-	public void ReceiveUpdateFiles(MessageType msgType, FreindNode fnode)
+	public synchronized void ReceiveUpdateFiles(MessageType msgType, FreindNode fnode)
 			throws Exception {
 		DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
 		DataInputStream dis = new DataInputStream(socket.getInputStream());
@@ -366,7 +354,6 @@ public class UpdateFiles {
 			File updateFilePath = new File(myUpdateFilePath
 					+ System.getProperty("file.separator") + fileName); // updatefile
 																		// 경로
-			// File myUpdateFilePath = new File(myFolderPath);
 
 			File[] myUpdateFile = null;
 			myUpdateFile = myUpdateFilePath.listFiles(new FilenameFilter() { // 내가
@@ -426,7 +413,7 @@ public class UpdateFiles {
 			bos.flush();
 
 			count++;
-
+			System.out.println("--- " + updateFilePath + " 업데이트 완료");
 		}
 		try {
 			bos.close();
@@ -553,8 +540,6 @@ public class UpdateFiles {
 
 		}
 
-		// dis.close();
-		// dos.close();
 	}
 
 	public static File[] OrganizeFiles(String path) { // 디렉토리안에 파일들 뽑아내주기

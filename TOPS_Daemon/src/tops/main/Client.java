@@ -45,7 +45,6 @@ public class Client extends Thread {
 			ctor = st.nextToken();
 			if(reciever == ctor) continue;
 			if(TOPS_Daemon.IDM.get(reciever).get(ctor)==null) return true;
-//			if(TOPS.IDM.get(TOPS.myID).get(ctor)==null) continue;
 			if(TOPS_Daemon.IDM.get(reciever).get(ctor) < TOPS_Daemon.IDM.get(TOPS_Daemon.myID).get(ctor))////////////ERROR
 				return true;
 		}
@@ -250,7 +249,6 @@ class Advertisement extends Client implements Runnable {
 					System.out.println("======================================Advertisement_Update IDM CONTINUE");
 					continue;
 				}
-//					message = msg.Advertisement_Update(Writing.getEntireFileList());
 				message = msg.Advertisement_Update(BFilter.getCommonFileList(fNode.bloomFilter));
 			}else if(msgType == MessageType.BloomFilter){
 				message = msg.BloomFilter();
@@ -267,7 +265,7 @@ class Advertisement extends Client implements Runnable {
 	}
 }
 
-class ExchangePublicKey extends Client implements Runnable {
+class ExchangePublicKey extends Client {//implements Runnable {
 	FreindNode fNode = null;
 
 	public ExchangePublicKey() throws UnknownHostException, IOException {
@@ -301,7 +299,6 @@ class ExchangePublicKey extends Client implements Runnable {
 			} else {
 				Message msg = new Message();
 				String keyMSG = msg.SendPublicKey(TOPS_Daemon.pubMod, TOPS_Daemon.pubExp);
-//				ArrayList<Client_NodeThread> MNTList = new ArrayList<Client_NodeThread>();
 
 				for (FreindNode fNode : FreindList.freindList.values()) {
 					try {
@@ -318,7 +315,7 @@ class ExchangePublicKey extends Client implements Runnable {
 	}
 }
 
-class ConnectFreindNode extends Client implements Runnable {
+class ConnectFreindNode extends Client{// implements Runnable {
 	FreindNode fNode;
 
 	public ConnectFreindNode(FreindNode fNode) throws UnknownHostException,
@@ -342,7 +339,7 @@ class ConnectFreindNode extends Client implements Runnable {
 	}
 }
 
-class ConnectFreindNodes extends Client implements Runnable {
+class ConnectFreindNodes extends Client{// implements Runnable {
 
 	public ConnectFreindNodes() throws UnknownHostException, IOException {
 		super();

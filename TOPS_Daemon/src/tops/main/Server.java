@@ -11,9 +11,6 @@ import net.rudp.*;
 
 public class Server implements Runnable {
 
-//	final static ExecutorService pool = Executors.newFixedThreadPool(100);
-	final static ExecutorService pool = Executors.newCachedThreadPool();
-
 	static ReliableServerSocket serverSocket = null;
 
 	static ReliableSocket socket = null;
@@ -44,7 +41,7 @@ public class Server implements Runnable {
 		serverSocket = new ReliableServerSocket();
 		TOPS_Daemon.myPrivatePN = serverSocket.getLocalPort();
 		fileSocket = new ServerSocket(TOPS_Daemon.myPrivatePN);
-		dm_fileSocket = new ServerSocket(9262);
+		dm_fileSocket =TOPS_Server.dmFileSocket;
 		serverThread = new Thread(this);
 	}
 
@@ -61,7 +58,6 @@ public class Server implements Runnable {
 			started = true;
 			while (!stopped) {
 				socket = (ReliableSocket) serverSocket.accept();
-				// pool.execute(new Request(socket));
 				Request req = new Request(socket);
 				new Thread(req).start();
 			}
@@ -86,7 +82,6 @@ public class Server implements Runnable {
 				while (true) {
 					String line = buffReader.readLine();
 
-					// socket.close();
 					if (line != null) {
 
 						String message = new String(line).trim();
@@ -100,8 +95,8 @@ public class Server implements Runnable {
 							message = decryptionMsg;
 						}
 
-						pool.execute(new ServerThread(message));
-						
+						ServerThread ST = new ServerThread(message);
+						new Thread(ST).start();
 					}
 				}
 			} catch (Exception ex) {

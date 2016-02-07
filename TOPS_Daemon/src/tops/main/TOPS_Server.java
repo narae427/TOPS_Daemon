@@ -16,28 +16,31 @@ public class TOPS_Server implements Runnable {
 	BufferedReader br = null;
 	public static PrintWriter pw = null;
 	ServerSocket server;
-	public static int ServerPN = 0;
+	public static int ServerPN = 0; //GUI
+	public static int FilePN = 0;//GUI
+	public static ServerSocket dmServerSocket = null;
+	public static ServerSocket dmFileSocket = null;
 	TOPS_Server tops_server = null;
 
 	public TOPS_Server(TOPS_Server tops_server) throws IOException {
 		this.tops_server = tops_server;
-		ServerPN = 9626;
-		System.out.println("Daemon_ServerPN " + ServerPN);
-		server = new ServerSocket(ServerPN);
+//		ServerPN = 9626;
+//		FilePN = 9262;
+//		
+//		System.out.println("Daemon_ServerPN " + ServerPN);
+//		server = new ServerSocket(ServerPN);
 	}
 
 	@Override
 	public void run() {
-		while (true) {
+	//	while (true) {
 			// TODO Auto-generated method stub
 
 			try {
-				// ServerPN = (int) (Math.random()*10010+10000);
-				// ////////////////////////////////////////////////////////////HNR
-				// ServerPN = 9626;
-				// System.out.println("Daemon_ServerPN " + ServerPN);
-				// server = new ServerSocket(ServerPN);
+				 System.out.println("--Daemon_ServerPN " + ServerPN);
+				 System.out.println("--Daemon_FilePN " + FilePN);
 				System.out.println("Daemon RESTART");
+				
 				sock = server.accept();
 				out = sock.getOutputStream();
 				in = sock.getInputStream();
@@ -142,7 +145,7 @@ public class TOPS_Server implements Runnable {
 			}
 		}
 
-	}
+	//}
 
 	public static void sendMessage(String line) {
 		pw.println(line);
