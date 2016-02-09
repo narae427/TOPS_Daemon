@@ -15,11 +15,4 @@ public class PM {
 	public String expMessage;
 	public String freindsInfoMessage;
 	
-//	public String fi_idMessage;
-//	public String fi_pvMessage;
-//	public String fi_pvipMessage;
-//	public String fi_pvpnMessage;
-//	public String fi_pbMessage;
-//	public String fi_pbipMessage;
-//	public String fi_pbpnMessage;
 }

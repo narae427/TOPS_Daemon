@@ -27,7 +27,6 @@ public class Server implements Runnable {
 	DataOutputStream dos = null;
 	DataInputStream dis = null;
 	Message msg = new Message();
-	// static DatagramSocket ds = null;
 	String printMsg = "";
 	String printPT = "";
 	boolean chk = false; // MS_ResultOfCheckOnlineFreind -> chk = true,

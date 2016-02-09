@@ -6,7 +6,7 @@ import tops.struct.*;
 import net.rudp.*;
 
 public class Client_LoginServer {
-	int MS_SendPortNumber = 8089; //13339
+	int MS_SendPortNumber = 8089; 
 	
 	Message msg = new Message();
 	

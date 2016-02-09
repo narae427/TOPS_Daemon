@@ -74,10 +74,8 @@ public static void calcCommonFriend(String fid) {
 				friendID = reader.readLine();
 				if (friendID == null)
 					break;
-//				System.out.println("BF : " + friendID);
 
 				if (f_BF.mightContain(friendID)) {
-//					System.out.println("Common Friend : " + friendID);
 
 					vList += (friendID+";");
 
@@ -131,8 +129,7 @@ public static void calcCommonFriend(String fid) {
 		File myUpdateFilePath = new File(TOPS_Daemon.myFolderPath
 				+ System.getProperty("file.separator") + "UpdateFile");
 
-		myUpdateFile = myUpdateFilePath.listFiles(new FilenameFilter() { // �����������ִ�updateFiles
-
+		myUpdateFile = myUpdateFilePath.listFiles(new FilenameFilter() { 
 					@Override
 					public boolean accept(File dir, String name) {
 						// TODO Auto-generated method stub
@@ -152,7 +149,7 @@ public static void calcCommonFriend(String fid) {
 				entireFileList += (fileName + ";");
 		}
 
-		System.out.println("ectire File LIST : " + entireFileList);
+		//System.out.println("ectire File LIST : " + entireFileList);
 		return entireFileList;
 	}
 }

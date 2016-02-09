@@ -23,11 +23,9 @@ public class TOPS_Daemon {
 	@SuppressWarnings("rawtypes")
 	public static BloomFilter bloomFilter;
 
-	// static String myInternalIpAddress = "";
 	static String myPublicIP = "";
 	public static String myPrivateIP = "";
 
-	// static ServerSocket ss = null;
 	static Hashtable<String, Integer> freindVerHT = new Hashtable<String, Integer>();
 	static Hashtable<String, Hashtable<String, Integer>> IDM = new Hashtable<String, Hashtable<String, Integer>>();
 
@@ -86,8 +84,6 @@ public class TOPS_Daemon {
 			KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA");
 			kpg.initialize(2048);
 			KeyPair kp = kpg.genKeyPair();
-//			Key publicKey = kp.getPublic();
-//			Key privateKey = kp.getPrivate();
 
 			KeyFactory fact = KeyFactory.getInstance("RSA");
 			RSAPublicKeySpec pub = fact.getKeySpec(kp.getPublic(),
@@ -140,7 +136,7 @@ public class TOPS_Daemon {
 		}
 		String temp = myID + "_" + "UpdateFile" + "_";
 		int ver = Integer.valueOf(myUpdateFile[0].getName().substring(
-				temp.length())); // //////////////////////////////////////////////////////////////////////
+				temp.length())); 
 		ver++;
 
 		File oldUpdateFile = new File(myUpdateFile[0].getPath());

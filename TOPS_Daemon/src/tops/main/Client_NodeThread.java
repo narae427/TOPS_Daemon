@@ -83,7 +83,7 @@ public class Client_NodeThread extends Thread {
 		}
 		
 		UF = new UpdateFiles(socket);
-		UF.ReceiveFile(fileName); // fName �̸��� ���� ������ �����غ� ��.
+		UF.ReceiveFile(fileName); 
 		socket.close();
 		}
 	}

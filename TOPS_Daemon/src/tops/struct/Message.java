@@ -22,27 +22,6 @@ public class Message {
 	Pattern expPattern = Pattern.compile("=.*=");
 	Pattern freindPattern = Pattern.compile(";.*;");
 	
-//	public String commandMessage;
-//	public String idMessage;
-//	public String pvMessage;
-//	public String pvipMessage;
-//	public String pvpnMessage;
-//	public String pbMessage;
-//	public String pbipMessage;
-//	public String pbpnMessage;
-//	public String fidMessage;
-//	public String fnameMessage;
-//	public String modMessage;
-//	public String expMessage;
-//	public String freindsInfoMessage;
-	
-//	public String fi_idMessage;
-//	public String fi_pvMessage;
-//	public String fi_pvipMessage;
-//	public String fi_pvpnMessage;
-//	public String fi_pbMessage;
-//	public String fi_pbipMessage;
-//	public String fi_pbpnMessage;
 
 	private String getPatternfromMSG(String message, Pattern p) {
 		Pattern pattern = p;
@@ -81,15 +60,6 @@ public class Message {
 		pm.freindsInfoMessage = getPatternfromMSG(message, freindPattern);
 	}
 	
-//	public void getFreindPatternfromMSG(String message, PM pm){
-//		pm.fi_idMessage = getPatternfromMSG(message, fidPattern);
-//		pm.fi_pvMessage = getPatternfromMSG(message, pvPattern);
-//		pm.fi_pvipMessage = getPatternfromMSG(pm.fi_pvMessage, ipPattern);
-//		pm.fi_pvpnMessage = getPatternfromMSG(pm.fi_pvMessage, pnPattern);
-//		pm.fi_pbMessage = getPatternfromMSG(message, pbPattern);
-//		pm.fi_pbipMessage = getPatternfromMSG(pm.fi_pbMessage, ipPattern);
-//		pm.fi_pbpnMessage = getPatternfromMSG(pm.fi_pbMessage, pnPattern);
-//	}
 	
 	private void printMSG(String message, String freindId) {
 		logger.log(Level.INFO,  "[SEND MESSAGE]	" + message + " to " + freindId);

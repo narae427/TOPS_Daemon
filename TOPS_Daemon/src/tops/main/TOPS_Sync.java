@@ -67,9 +67,6 @@ public class TOPS_Sync {
 				data = bis.read(buffer);
 				dos.write(buffer, 0, data);
 				dos.flush();
-				System.out.print("GUI에게 파일보냄 : "+ fileName + " 내용 : " );
-				System.out.write(buffer);
-				System.out.println();
 				try {
 					bis.close();
 					fin.close();
@@ -121,7 +118,6 @@ public class TOPS_Sync {
 			File newFilePath = new File(TOPS_Daemon.myHomePath
 					+ System.getProperty("file.separator") + "TOPS_Daemon"
 					+ System.getProperty("file.separator") + newFile); // updatefile
-			System.out.println("뭥미 : " + newFilePath);
 
 			String[] fileNameTokens = fileName.split("_UpdateFile_");
 			final String newFileName = fileNameTokens[0];

@@ -83,7 +83,6 @@ public class FreindList {
 	
 	
 	static public void printFreindList(){
-		System.out.println(" *** ���� Online�� ģ��");
 		for(FreindNode fn : freindList.values()){
 			System.out.println(fn.freindID);
 		}

@@ -47,9 +47,6 @@ public class UpdateFiles {
 
 	public synchronized void DoUpdate(MessageType msgType, FreindNode fNode)
 			throws Exception {
-		System.out.println();
-		System.out
-				.println("===============================================================");
 
 		File[] myUpdateFile = null;
 		myUpdateFile = myUpdateFilePath.listFiles(new FilenameFilter() { // 내가
@@ -190,10 +187,6 @@ public class UpdateFiles {
 			fileLength -= data;
 
 		}
-		System.out.print("받은 파일 이름 : " + fileName + " 내용 : " );
-		System.out.write(buffer);
-		System.out.println();
-	
 		String pictureName = dis.readUTF();
 		if (pictureName.equals("NoPicture")) {
 
@@ -271,9 +264,6 @@ public class UpdateFiles {
 			fileTotalBuffer += data;
 			FileLength -= data;
 		}
-		System.out.print("보내는 파일 이름 : " + fileName + " 내용 : " );
-		System.out.write(buffer);
-		System.out.println();
 		LineNumberReader reader = new LineNumberReader(new FileReader(f));
 		String firstLine = reader.readLine(); // 그림파일 경로
 		reader.close();
@@ -432,7 +422,7 @@ public class UpdateFiles {
 	@SuppressWarnings("unchecked")
 	public void SendUpdateFiles(MessageType msgType, FreindNode fnode,
 			final String friendId) throws IOException {
-		System.out.println("SEND UPDATEFILES");
+		//System.out.println("SEND UPDATEFILES");
 		File[] tempFiles = null;
 		ArrayList<File> fileArr = new ArrayList<File>();
 
@@ -451,7 +441,7 @@ public class UpdateFiles {
 		}
 
 		if (tempFiles == null) {
-			System.out.println("UpdateFile 없음"); // //여기가 문제네
+			System.out.println("UpdateFile 없음"); 
 			return;
 		}
 
@@ -459,10 +449,6 @@ public class UpdateFiles {
 			String id = f.getName().substring(0,
 					f.getName().indexOf("_UpdateFile"));
 
-			System.out.println("ERROR :  " + fnode + " " + fnode.freindID);
-
-			System.out.println("ERROR :  " + fnode + " " + fnode.freindID + " "
-					+ fnode.bloomFilter);
 			if (fnode.bloomFilter.mightContain(id))
 				fileArr.add(f);
 		}

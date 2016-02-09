@@ -150,8 +150,6 @@ public class ServerThread implements Runnable {
 
 			printMSG(pm.commandMessage, fnode.freindID);
 
-//			if (fnode.pubMod != null && fnode.pubExp != null)
-//				break;
 			fnode.pubMod = new BigInteger(pm.modMessage);
 			fnode.pubExp = new BigInteger(pm.expMessage);
 
@@ -175,7 +173,7 @@ public class ServerThread implements Runnable {
 			try {
 				MNT = new Client_NodeThread(fnode);
 				MNT.readyForReceiveUpdateFile_UPDATE();
-				System.out.println("Ready For Recieve Update File");
+				//System.out.println("Ready For Recieve Update File");
 			} catch (Exception e3) {
 				e3.printStackTrace();
 			}
@@ -186,7 +184,6 @@ public class ServerThread implements Runnable {
 				e6.printStackTrace();
 			}
 
-//			Client.CallAdvertisement_BloomFilter();
 			break;
 
 		case 2: // "Advertisement_Login2"
@@ -200,7 +197,6 @@ public class ServerThread implements Runnable {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-//			Client.CallAdvertisement_BloomFilter();
 			break;
 
 		case 3: // "Request_Updates"
@@ -262,7 +258,6 @@ public class ServerThread implements Runnable {
 			break;
 		case 7: // "Advertisement_Update"
 			if (checkUpdates(pm.fnameMessage)){
-				System.out.println(" BREAK !!!");
 				break;
 			}
 				
@@ -281,7 +276,6 @@ public class ServerThread implements Runnable {
 			fnode = FreindList.freindList.get(pm.idMessage);
 
 			if (checkData(pm.fnameMessage)) {
-				System.out.println(" BREAK !!!");
 				break;
 			}
 
@@ -529,7 +523,6 @@ public class ServerThread implements Runnable {
 						}
 						if (str.equals(freindId)) {
 							exist = true;
-							System.out.println(" str equals " + freindId);
 						}
 					}
 				} catch (IOException e) {
@@ -541,7 +534,7 @@ public class ServerThread implements Runnable {
 			if (!exist) {
 				FileWriter fw;
 				try {
-					fw = new FileWriter(freindListFile, true); 	// AllowAddFreind�� ���ʿ���.
+					fw = new FileWriter(freindListFile, true); 	
 					fw.write(freindId + "\n");
 					fw.close();
 				} catch (IOException e) {

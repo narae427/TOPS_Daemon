@@ -45,7 +45,7 @@ public class Client extends Thread {
 			ctor = st.nextToken();
 			if(reciever == ctor) continue;
 			if(TOPS_Daemon.IDM.get(reciever).get(ctor)==null) return true;
-			if(TOPS_Daemon.IDM.get(reciever).get(ctor) < TOPS_Daemon.IDM.get(TOPS_Daemon.myID).get(ctor))////////////ERROR
+			if(TOPS_Daemon.IDM.get(reciever).get(ctor) < TOPS_Daemon.IDM.get(TOPS_Daemon.myID).get(ctor))
 				return true;
 		}
 		return false;
@@ -73,7 +73,6 @@ public class Client extends Thread {
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			// e.printStackTrace();
 			System.out.println("Connection FAIL");
 		}
 
@@ -88,7 +87,7 @@ public class Client extends Thread {
 		}
 		try {
 			if (encrypt)
-				message = RSAcrypto.encrypt(node.freindID, message); ////////////ERROR
+				message = RSAcrypto.encrypt(node.freindID, message);
 		} catch (InvalidKeyException | NoSuchAlgorithmException
 				| NoSuchPaddingException | IllegalBlockSizeException
 				| BadPaddingException | InvalidKeySpecException
@@ -265,7 +264,7 @@ class Advertisement extends Client implements Runnable {
 	}
 }
 
-class ExchangePublicKey extends Client {//implements Runnable {
+class ExchangePublicKey extends Client {
 	FreindNode fNode = null;
 
 	public ExchangePublicKey() throws UnknownHostException, IOException {
@@ -315,7 +314,7 @@ class ExchangePublicKey extends Client {//implements Runnable {
 	}
 }
 
-class ConnectFreindNode extends Client{// implements Runnable {
+class ConnectFreindNode extends Client{
 	FreindNode fNode;
 
 	public ConnectFreindNode(FreindNode fNode) throws UnknownHostException,
@@ -339,7 +338,7 @@ class ConnectFreindNode extends Client{// implements Runnable {
 	}
 }
 
-class ConnectFreindNodes extends Client{// implements Runnable {
+class ConnectFreindNodes extends Client{
 
 	public ConnectFreindNodes() throws UnknownHostException, IOException {
 		super();
